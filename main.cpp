@@ -62,8 +62,23 @@ public:
 
     BoardCell* get(const stf::Vec2d& pos) { return board.at(Size.x * pos.y + pos.x); }
 
-    stf::Vec2d Size { 8, 8 };
+    stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key)
+    {
+        switch (key)
+        {
+        case 'w': if(m_cursor.selectorCell.pos.y > 0) m_cursor.selectorCell.pos -= stf::Vec2d(0,1); break;
+        case 'a': if(m_cursor.selectorCell.pos.x > 0) m_cursor.selectorCell.pos -= stf::Vec2d(1,0); break;
+        case 's': if(m_cursor.selectorCell.pos.y < Size.y-1) m_cursor.selectorCell.pos += stf::Vec2d(0,1); break;
+        case 'd': if(m_cursor.selectorCell.pos.x < Size.x-1) m_cursor.selectorCell.pos += stf::Vec2d(1,0); break;
+        case 'q': return nullptr;
+//        case ' ': return put(sender);
+        }
+        return sender;
+    }
+
+    const stf::Vec2d Size { 8, 8 };
     std::vector<BoardCell*> board = std::vector<BoardCell*>(Size.x * Size.y);
+    Cursor m_cursor;
 };
 
 class GameView : public stf::smv::IView
@@ -78,7 +93,7 @@ public:
         GameModel *model = static_cast<GameModel*>(m_model);
         for(int y = 0; y < model->Size.y; ++y) {
             for(int x = 0; x < model->Size.x; ++x) {
-                renderer.drawPixel({x,y+2}, model->get({x,y})->view());
+                renderer.drawPixel({x*3+1, y+2}, model->get({x,y})->view());
             }
         }
     }
@@ -92,13 +107,15 @@ class Game : public stf::Window
 
     bool onUpdate(const float) final
     {
+        if(currentView == nullptr)
+            return false;
         currentView->show(renderer);
         return true;
     }
 
     void keyEvents(const int key) final
     {
-
+        currentView = currentView->keyEventsHandler(key);
     }
 
     void mouseEvents(const stf::MouseRecord& mr) final
