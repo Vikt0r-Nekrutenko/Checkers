@@ -37,6 +37,18 @@ public:
     uint8_t view() const final { return 'O'; }
 };
 
+struct Selector
+{
+    stf::Vec2d pos { 0, 0 };
+    BoardCell *cell = new BoardCell;
+};
+
+struct Cursor
+{
+    Selector selectorCell;
+    Selector destinationCell;
+};
+
 class GameModel : public stf::smv::BaseModel
 {
 public:
