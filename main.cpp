@@ -96,6 +96,9 @@ public:
                 renderer.drawPixel({x*3+1, y+2}, model->get({x,y})->view());
             }
         }
+
+        renderer.drawPixel({model->m_cursor.selectorCell.pos.x * 3 + 0, model->m_cursor.selectorCell.pos.y + 2}, '[');
+        renderer.drawPixel({model->m_cursor.selectorCell.pos.x * 3 + 2, model->m_cursor.selectorCell.pos.y + 2}, ']');
     }
 };
 
