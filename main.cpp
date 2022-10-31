@@ -22,6 +22,7 @@ class CheckerCell : public BoardCell
 {
 public:
     inline uint8_t view() const final { return 'o'; }
+    bool onPlacementHandler(std::vector<BoardCell*>& board, Cursor& cursor) final;
 };
 
 class QueenCheckerCell : public BoardCell
@@ -57,16 +58,20 @@ struct Selector
 
 struct Cursor
 {
-    Selector selectorCell;
-    Selector destinationCell;
+    Selector selectableCell;
+    Selector selectedCell;
 };
 
-bool BoardCell::onPlacementHandler(std::vector<BoardCell*>& board, Cursor& cursor)
+bool BoardCell::onPlacementHandler(std::vector<BoardCell*>&, Cursor&) { return true; }
+
+bool CheckerCell::onPlacementHandler(std::vector<BoardCell*>& board, Cursor& cursor)
 {
-    Selector &sc = cursor.selectorCell;
-    Selector &dc = cursor.destinationCell;
-    BoardCell* cell = board.at(8 * cursor.selectorCell.pos.y + cursor.selectorCell.pos.x);
-    if(dc.pos.diff(sc.pos) <= 1.5f) {
+    Selector &sc = cursor.selectableCell;
+    Selector &dc = cursor.selectedCell;
+
+    if(sc.pos == dc.pos + stf::Vec2d(1,1) || sc.pos == dc.pos + stf::Vec2d(-1,1)) {
+        board.at(8 * cursor.selectedCell.pos.y + cursor.selectedCell.pos.x) =
+                BoardCellFactory::boardCell.create();
         return true;
     }
     return false;
@@ -87,29 +92,31 @@ public:
     BoardCell* get(const stf::Vec2d& pos) { return board.at(Size.x * pos.y + pos.x); }
     void place(const Selector& s) { board.at(Size.x * s.pos.y + s.pos.x) = s.cell; }
 
+    stf::smv::IView* put(stf::smv::IView *sender)
+    {
+        BoardCell *cell = get(m_cursor.selectableCell.pos);
+        Selector &sc = m_cursor.selectableCell;
+        Selector &dc = m_cursor.selectedCell;
+        if(sc.cell == dc.cell && *sc.cell != BoardCell() && sc.cell->onPlacementHandler(board, m_cursor)) {
+            place(sc);
+            sc.cell = dc.cell = BoardCellFactory::boardCell.create();
+        } else if(*cell != BoardCell()) {
+            m_cursor.selectedCell.pos = m_cursor.selectableCell.pos;
+            m_cursor.selectedCell.cell = m_cursor.selectableCell.cell = cell;
+        }
+        return sender;
+    }
+
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key)
     {
         switch (key)
         {
-        case 'w': if(m_cursor.selectorCell.pos.y > 0) m_cursor.selectorCell.pos -= stf::Vec2d(0,1); break;
-        case 'a': if(m_cursor.selectorCell.pos.x > 0) m_cursor.selectorCell.pos -= stf::Vec2d(1,0); break;
-        case 's': if(m_cursor.selectorCell.pos.y < Size.y-1) m_cursor.selectorCell.pos += stf::Vec2d(0,1); break;
-        case 'd': if(m_cursor.selectorCell.pos.x < Size.x-1) m_cursor.selectorCell.pos += stf::Vec2d(1,0); break;
+        case 'w': if(m_cursor.selectableCell.pos.y > 0) m_cursor.selectableCell.pos -= stf::Vec2d(0,1); break;
+        case 'a': if(m_cursor.selectableCell.pos.x > 0) m_cursor.selectableCell.pos -= stf::Vec2d(1,0); break;
+        case 's': if(m_cursor.selectableCell.pos.y < Size.y-1) m_cursor.selectableCell.pos += stf::Vec2d(0,1); break;
+        case 'd': if(m_cursor.selectableCell.pos.x < Size.x-1) m_cursor.selectableCell.pos += stf::Vec2d(1,0); break;
         case 'q': return nullptr;
-        case ' ':
-            BoardCell *cell = get(m_cursor.selectorCell.pos);
-            Selector &sc = m_cursor.selectorCell;
-            Selector &dc = m_cursor.destinationCell;
-            if(sc.cell == dc.cell && *sc.cell != BoardCell()) {
-                if(cell->onPlacementHandler(board, m_cursor)) {
-                    place(sc);
-                    sc.cell = dc.cell = BoardCellFactory::boardCell.create();
-                }
-            } else if(*cell != BoardCell() ) {
-                m_cursor.destinationCell.pos = m_cursor.selectorCell.pos;
-                m_cursor.destinationCell.cell = m_cursor.selectorCell.cell = cell;
-            }
-            break;
+        case ' ': return put(sender);
         }
         return sender;
     }
@@ -134,13 +141,13 @@ public:
                 renderer.drawPixel({x*3+1, y+2}, model->get({x,y})->view());
             }
         }
-        if(*model->m_cursor.destinationCell.cell != BoardCell()){
-            renderer.drawPixel({model->m_cursor.destinationCell.pos.x * 3 + 0, model->m_cursor.destinationCell.pos.y + 2}, '{');
-            renderer.drawPixel({model->m_cursor.destinationCell.pos.x * 3 + 2, model->m_cursor.destinationCell.pos.y + 2}, '}');
+        if(*model->m_cursor.selectedCell.cell != BoardCell()){
+            renderer.drawPixel({model->m_cursor.selectedCell.pos.x * 3 + 0, model->m_cursor.selectedCell.pos.y + 2}, '{');
+            renderer.drawPixel({model->m_cursor.selectedCell.pos.x * 3 + 2, model->m_cursor.selectedCell.pos.y + 2}, '}');
         }
 
-        renderer.drawPixel({model->m_cursor.selectorCell.pos.x * 3 + 0, model->m_cursor.selectorCell.pos.y + 2}, '[');
-        renderer.drawPixel({model->m_cursor.selectorCell.pos.x * 3 + 2, model->m_cursor.selectorCell.pos.y + 2}, ']');
+        renderer.drawPixel({model->m_cursor.selectableCell.pos.x * 3 + 0, model->m_cursor.selectableCell.pos.y + 2}, '[');
+        renderer.drawPixel({model->m_cursor.selectableCell.pos.x * 3 + 2, model->m_cursor.selectableCell.pos.y + 2}, ']');
 
     }
 };
