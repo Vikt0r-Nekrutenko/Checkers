@@ -42,6 +42,7 @@ public:
     bool nextRMoveIsPossible(std::vector<BoardCell*>& board, const Selector& selected, const Selector& selectable);
     bool nextLFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
     bool nextRFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
+    bool isFightAvailiable(GameModel *model, const Selector& selected) const;
 
     stf::Vec2d dirL { 0, 0 };
     stf::Vec2d dirR { 0, 0 };
@@ -130,7 +131,7 @@ public:
         }
         board.at(2) = BoardCellFactory::whiteCell.create();
         board.at(11) = BoardCellFactory::blackCell.create();
-        board.at(9) = BoardCellFactory::whiteCell.create();
+//        board.at(9) = BoardCellFactory::whiteCell.create();
     }
 
     BoardCell* get(const stf::Vec2d& pos) { return board.at(Size.x * pos.y + pos.x); }
@@ -185,49 +186,30 @@ bool MovableCheckerCell::onPlacementHandler(GameModel *model, Cursor& cursor)
     BoardCell *lchup = get(dc.pos + stf::Vec2d(1,1));
     BoardCell *rchup = get(dc.pos + stf::Vec2d(-1,1));
 
-//    if(sc.pos == lbpp && lchup != BoardCellFactory::emptyCell.create())
-//    {
-//        clearCell(dc);
-//        clearCell1(sc.pos - stf::Vec2d(1,1));
-//        return true;
-//    }
-//    else if (sc.pos == rbpp && rchup != BoardCellFactory::emptyCell.create())
-//    {
-//        clearCell(dc);
-//        clearCell1(sc.pos - stf::Vec2d(-1,1));
-//        return true;
-//    }
-//    else if(sc.pos == dc.pos + stf::Vec2d(1,1) && lchup == BoardCellFactory::emptyCell.create())
-//    {
-//        clearCell(dc);
-//        return true;
-//    }
-//    else
-    if(nextRMoveIsPossible(model->board, dc, sc) || nextLMoveIsPossible(model->board, dc, sc))
-    {
+    if(isFightAvailiable(model, dc)) {
+        if(nextRFightIsPossible(model, dc, sc)) {
+            clearCell(dc);
+            clearCell1(dc.pos + dirR);
+            return true;
+        } else if(nextLFightIsPossible(model, dc, sc)) {
+            clearCell(dc);
+            clearCell1(dc.pos + dirL);
+            return true;
+        }
+    } else if(nextRMoveIsPossible(model->board, dc, sc) || nextLMoveIsPossible(model->board, dc, sc)) {
         clearCell(dc);
-        return true;
-    } else if(nextRFightIsPossible(model, dc, sc)) {
-        clearCell(dc);
-        clearCell1(dc.pos + dirR);
-        return true;
-    } else if(nextLFightIsPossible(model, dc, sc)) {
-        clearCell(dc);
-        clearCell1(dc.pos + dirL);
         return true;
     }
 
-//    if(nextLMoveIsPossible(board, dc, sc))
-//    {
-//        clearCell(dc);
-//        return true;
-//    } else if(nextLFightIsPossible(board, dc, sc)) {
-//        clearCell(dc);
-//        clearCell1(dc.pos + dirR);
-//        return true;
-//    }
+    return false;
+}
 
+bool MovableCheckerCell::isFightAvailiable(GameModel *model, const Selector& selected) const
+{
+    auto get = [&](const stf::Vec2d& p) { return model->board.at(8 * p.y + p.x); };
 
+    if(get(selected.pos + dirL) == model->opponent() || get(selected.pos + dirR) == model->opponent())
+        return true;
     return false;
 }
 
