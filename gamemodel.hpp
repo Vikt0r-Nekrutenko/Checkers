@@ -10,9 +10,9 @@ class GameModel : public stf::smv::BaseModel
 public:
     GameModel() : stf::smv::BaseModel()
     {
-        board.place({2,0}, GameBoard::blackChecker());
-        board.place({3,1}, GameBoard::whiteChecker());
-        board.place({5,3}, GameBoard::whiteChecker());
+        board.place({2,0}, GameBoard::whiteChecker());
+        board.place({3,1}, GameBoard::blackChecker());
+        board.place({5,3}, GameBoard::blackChecker());
     }
 
     BoardCell *opponent() const {
@@ -28,14 +28,15 @@ public:
         Selector &sc = cursor.selectableCell;
         Selector &dc = cursor.selectedCell;
 
-        if(!cursor.cursorIsEmpty() && sc.cell->onPlacementHandler(this, cursor)) {
-//            place(sc);
-//            sc.cell = dc.cell = BoardCellFactory::emptyCell.create();
-            cursor.reset();
-            player = opponent();
-        } else if(cell->color() == player->color()) {
-            cursor.select(cell);
-        }
+        try {
+            if(!cursor.cursorIsEmpty() && sc.cell->onPlacementHandler(this, cursor)) {
+                board.place(cursor.selectableCell.pos, cursor.selectableCell.cell);
+                cursor.reset();
+                player = opponent();
+            } else if(cell->color() == player->color()) {
+                cursor.select(cell);
+            }
+        } catch(const std::out_of_range& ex) {  }
 
         return sender;
     }
@@ -56,7 +57,7 @@ public:
 
     GameBoard board = GameBoard();
     Cursor cursor = Cursor();
-    BoardCell *player = GameBoard::blackPlayer();
+    BoardCell *player = GameBoard::whitePlayer();
 };
 
 #endif // GAMEMODEL_HPP
