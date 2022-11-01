@@ -10,6 +10,21 @@ class GameModel : public stf::smv::BaseModel
 public:
     GameModel() = default;
 
+    void switchPlayer()
+    {
+//        if(player == BoardCellFactory::whiteCell.create())
+//            player = BoardCellFactory::blackCell.create();
+//        else
+//            player = BoardCellFactory::whiteCell.create();
+    }
+
+    BoardCell *opponent() const {
+//        if(player == BoardCellFactory::whiteCell.create())
+//            return BoardCellFactory::blackCell.create();
+//        else
+//            return BoardCellFactory::whiteCell.create();
+    }
+
     stf::smv::IView* put(stf::smv::IView *sender)
     {
         BoardCell *cell = board.getSelectedCell(cursor);
@@ -20,7 +35,7 @@ public:
 //            place(sc);
 //            sc.cell = dc.cell = BoardCellFactory::emptyCell.create();
 //            switchPlayer();
-//        } else if(get(sc.pos) == player) {
+        } else if(board.getSelectableCell(cursor) == player) {
 //            m_cursor.selectedCell.pos = m_cursor.selectableCell.pos;
 //            m_cursor.selectedCell.cell = m_cursor.selectableCell.cell = cell;
         }
@@ -44,6 +59,7 @@ public:
 
     GameBoard board = GameBoard();
     Cursor cursor = Cursor();
+    BoardCell *player = GameBoard::emptyCell();
 };
 
 #endif // GAMEMODEL_HPP

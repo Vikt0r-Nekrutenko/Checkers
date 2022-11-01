@@ -15,3 +15,8 @@ BoardCell *GameBoard::getSelectedCell(const Cursor &cursor)
 {
     return (*this)[cursor.selectedCell.pos];
 }
+
+BoardCell *GameBoard::getSelectableCell(const Cursor &cursor)
+{
+    return (*this)[cursor.selectableCell.pos];
+}
