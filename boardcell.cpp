@@ -7,6 +7,22 @@ auto isOpponent = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& d
     return model->board[cursor.selectedCell.pos + direction]->color() == model->opponent()->color();
 };
 
+auto attackIsAvailiable = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
+{
+    try {
+        BoardCell *lCellBehindOpponent = model->board[cursor.selectedCell.pos + attackDirection];
+
+        if(isOpponent(model, cursor, moveDirection) && lCellBehindOpponent == GameBoard::emptyCell())
+            return true;
+    } catch(const std::out_of_range& ex) {
+        ++model->exCount;
+        return false;
+    }
+    return false;
+};
+
+
+
 bool MovableObject::lMoveIsPossible(GameModel *model, const Cursor& cursor)
 {
     if(model->board.getSelectableCell(cursor) == GameBoard::emptyCell()
@@ -41,6 +57,16 @@ bool MovableObject::rAttackIsPossible(GameModel *model, const Cursor& cursor)
     return false;
 }
 
+bool MovableObject::lAttackAvailiable(GameModel *model, const Cursor& cursor) const
+{
+    return attackIsAvailiable(model, cursor, moveDirectionL, attackDirectionL);
+}
+
+bool MovableObject::rAttackAvailiable(GameModel *model, const Cursor& cursor) const
+{
+    return attackIsAvailiable(model, cursor, moveDirectionR, attackDirectionR);
+}
+
 bool MovableObject::isFightAvailiable(GameModel *model, const Cursor& cursor) const
 {
     try {
@@ -58,19 +84,20 @@ bool MovableObject::isFightAvailiable(GameModel *model, const Cursor& cursor) co
 
 bool MovableObject::onPlacementHandler(GameModel *model, const Cursor &cursor)
 {
-    if(isFightAvailiable(model, cursor)) {
-        model->board.clear(cursor.selectedCell.pos);
-
+    if(rAttackAvailiable(model, cursor)) {
         if(rAttackIsPossible(model, cursor)) {
+            model->board.clear(cursor.selectedCell.pos);
             model->board.clear(cursor.selectedCell.pos + moveDirectionR);
             return true;
-        } else if(lAttackIsPossible(model, cursor)) {
+        } return false;
+    } else if(lAttackAvailiable(model, cursor)) {
+        if(lAttackIsPossible(model, cursor)) {
+            model->board.clear(cursor.selectedCell.pos);
             model->board.clear(cursor.selectedCell.pos + moveDirectionL);
             return true;
-        }
+        } return false;
     } else if(rMoveIsPossible(model, cursor) || lMoveIsPossible(model, cursor)) {
         model->board.clear(cursor.selectedCell.pos);
         return true;
-    }
-    return false;
+    } return false;
 }

@@ -51,9 +51,14 @@ public:
 
     virtual bool lMoveIsPossible(GameModel *model, const Cursor& cursor);
     virtual bool rMoveIsPossible(GameModel *model, const Cursor& cursor);
+
     virtual bool lAttackIsPossible(GameModel *model, const Cursor& cursor);
     virtual bool rAttackIsPossible(GameModel *model, const Cursor& cursor);
+
     virtual bool isFightAvailiable(GameModel *model, const Cursor& cursor) const;
+    virtual bool rAttackAvailiable(GameModel *model, const Cursor& cursor) const;
+    virtual bool lAttackAvailiable(GameModel *model, const Cursor& cursor) const;
+
 
     stf::Vec2d   moveDirectionL { 0, 0 },   moveDirectionR { 0, 0 };
     stf::Vec2d attackDirectionL { 0, 0 }, attackDirectionR { 0, 0 };

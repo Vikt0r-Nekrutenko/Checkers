@@ -33,4 +33,11 @@ void GameView::show(stf::Renderer &renderer)
     model->player->color() == stf::ColorTable::Black
             ? renderer.drawText({2,10}, "Black")
             : renderer.drawText({2,10}, "White");
+
+    if(model->board.objectIsInBlackZone(model->cursor.selectableCell.pos))
+        renderer.drawText({0,11}, "In black zone.");
+    else if(model->board.objectIsInWhiteZone(model->cursor.selectableCell.pos))
+        renderer.drawText({0,11}, "In white zone.");
+
+    renderer.draw({0,12}, "Exception counter : %d", model->exCount);
 }

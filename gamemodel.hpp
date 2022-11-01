@@ -29,6 +29,11 @@ public:
         Selector &dc = cursor.selectedCell;
 
         if(!cursor.cursorIsEmpty() && sc.cell->onPlacementHandler(this, cursor)) {
+//            if(board.objectIsInBlackZone(cursor.selectableCell.pos))
+//                board.place(cursor.selectableCell.pos, GameBoard::whiteQueen());
+//            else if(board.objectIsInWhiteZone(cursor.selectableCell.pos))
+//                board.place(cursor.selectableCell.pos, GameBoard::blackQueen());
+//            else
             board.place(cursor.selectableCell.pos, cursor.selectableCell.cell);
             cursor.reset();
             player = opponent();
@@ -55,7 +60,8 @@ public:
 
     GameBoard board = GameBoard();
     Cursor cursor = Cursor();
-    BoardCell *player = GameBoard::blackPlayer();
+    BoardCell *player = GameBoard::whitePlayer();
+    uint32_t exCount = 0ul;
 };
 
 #endif // GAMEMODEL_HPP

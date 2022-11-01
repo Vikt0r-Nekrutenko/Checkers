@@ -32,6 +32,15 @@ public:
         return place(p, emptyCell());
     }
 
+    bool objectIsInBlackZone(const stf::Vec2d& pos) const {
+        int indx = Size.x * pos.y + pos.x;
+        return indx >= Size.x * Size.y - Size.x && indx < Size.x * Size.y;
+    }
+
+    bool objectIsInWhiteZone(const stf::Vec2d& pos) const {
+        int indx = Size.x * pos.y + pos.x;
+        return indx >= 0 && indx < Size.x;
+    }
 
     BoardCell* getSelectedCell(const Cursor& cursor);
     BoardCell* getSelectableCell(const Cursor& cursor);
