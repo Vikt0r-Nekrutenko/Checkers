@@ -134,7 +134,12 @@ public:
         board.at(29) = BoardCellFactory::blackCell.create();
     }
 
-    BoardCell* get(const stf::Vec2d& pos) { return board.at(Size.x * pos.y + pos.x); }
+    BoardCell* get(const stf::Vec2d& pos) {
+        int indx = Size.x * pos.y + pos.x;
+        if(indx < 0 || indx > 63)
+            return nullptr;
+        return board.at(indx);
+    }
     void place(const Selector& s) { board.at(Size.x * s.pos.y + s.pos.x) = s.cell; }
     void switchPlayer()
     {
@@ -169,7 +174,7 @@ public:
     const stf::Vec2d Size { 8, 8 };
     std::vector<BoardCell*> board = std::vector<BoardCell*>(Size.x * Size.y);
     Cursor m_cursor;
-    MovableCheckerCell *player = BoardCellFactory::whiteCell.create();
+    MovableCheckerCell *player = BoardCellFactory::blackCell.create();
 };
 
 bool MovableCheckerCell::onPlacementHandler(GameModel *model, Cursor& cursor)
@@ -199,7 +204,8 @@ bool MovableCheckerCell::onPlacementHandler(GameModel *model, Cursor& cursor)
 
 bool MovableCheckerCell::isFightAvailiable(GameModel *model, const Selector& selected) const
 {
-    if(model->get(selected.pos + dirL) == model->opponent() || model->get(selected.pos + dirR) == model->opponent())
+    if((model->get(selected.pos + dirL) == model->opponent() && model->get(selected.pos + fightDirL) == BoardCellFactory::emptyCell.create()) ||
+       (model->get(selected.pos + dirR) == model->opponent() && model->get(selected.pos + fightDirR) == BoardCellFactory::emptyCell.create()))
         return true;
     return false;
 }
