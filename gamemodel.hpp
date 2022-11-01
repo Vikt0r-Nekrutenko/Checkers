@@ -11,7 +11,22 @@ public:
     GameModel() = default;
 
     stf::smv::IView* put(stf::smv::IView *sender)
-    { return sender; }
+    {
+        BoardCell *cell = board.getSelectedCell(cursor);
+        Selector &sc = cursor.selectableCell;
+        Selector &dc = cursor.selectedCell;
+
+        if(cursor.cursorIsEmpty() && sc.cell->onPlacementHandler(this, m_cursor)) {
+            place(sc);
+            sc.cell = dc.cell = BoardCellFactory::emptyCell.create();
+            switchPlayer();
+        } else if(get(sc.pos) == player) {
+            m_cursor.selectedCell.pos = m_cursor.selectableCell.pos;
+            m_cursor.selectedCell.cell = m_cursor.selectableCell.cell = cell;
+        }
+
+        return sender;
+    }
 
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) final
     {

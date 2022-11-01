@@ -7,6 +7,7 @@
 #include "boardcell.hpp"
 
 class BoardCell;
+class Cursor;
 
 class GameBoard
 {
@@ -18,6 +19,8 @@ public:
             throw std::out_of_range(std::string("index = ") + std::to_string(i));
         return board.at(i);
     }
+
+    BoardCell* getSelectedCell(const Cursor& cursor);
 
     const stf::Vec2d Size { 8, 8 };
     std::vector<BoardCell*> board;
