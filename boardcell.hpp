@@ -44,7 +44,21 @@ public:
     }
 };
 
-class MovableObject : public BoardCell
+class ForwardMovable
+{
+public:
+    stf::Vec2d   moveFwL { 0, 0 },   moveFwR { 0, 0 };
+    stf::Vec2d attackFwL { 0, 0 }, attackFwR { 0, 0 };
+};
+
+class BackwardMovable
+{
+public:
+    stf::Vec2d   moveBwL { 0, 0 },   moveBwR { 0, 0 };
+    stf::Vec2d attackBwL { 0, 0 }, attackBwR { 0, 0 };
+};
+
+class MovableObject : public BoardCell, public ForwardMovable
 {
 public:
     bool onPlacementHandler(GameModel*, const Cursor&) override;
@@ -58,10 +72,16 @@ public:
     virtual bool isFightAvailiable(GameModel *model, const Cursor& cursor) const;
     virtual bool rAttackAvailiable(GameModel *model, const Cursor& cursor) const;
     virtual bool lAttackAvailiable(GameModel *model, const Cursor& cursor) const;
+};
 
-
-    stf::Vec2d   moveFwL { 0, 0 },   moveFwR { 0, 0 };
-    stf::Vec2d attackFwL { 0, 0 }, attackFwR { 0, 0 };
+class WhiteMovable : public ForwardMovable
+{
+public:
+    WhiteMovable() : ForwardMovable()
+    {
+        moveFwL   = { -1, +1 };   moveFwR = { +1, +1 };
+        attackFwL = { -2, +2 }; attackFwR = { +2, +2 };
+    }
 };
 
 class WhiteObject : public MovableObject
@@ -73,6 +93,16 @@ public:
     {
         moveFwL   = { -1, +1 };   moveFwR = { +1, +1 };
         attackFwL = { -2, +2 }; attackFwR = { +2, +2 };
+    }
+};
+
+class BlackMovable : public ForwardMovable
+{
+public:
+    BlackMovable() : ForwardMovable()
+    {
+        moveFwL   = { -1, -1 },   moveFwR = { +1, -1 };
+        attackFwL = { -2, -2 }, attackFwR = { +2, -2 };
     }
 };
 
@@ -89,6 +119,15 @@ public:
     }
 };
 
+class Queen : public MovableObject
+{
+public:
+    stf::Vec2d   moveBwL { 0, 0 },   moveBwR { 0, 0 };
+    stf::Vec2d attackBwL { 0, 0 }, attackBwR { 0, 0 };
+
+    bool onPlacementHandler(GameModel *model, const Cursor &cursor) override;
+};
+
 class WChecker : public WhiteObject
 {
 public:
@@ -102,27 +141,31 @@ public:
     uint8_t view() const override { return 'b'; }
 };
 
-class Queen : public MovableObject
-{
-public:
-    stf::Vec2d   moveBwL { 0, 0 },   moveBwR { 0, 0 };
-    stf::Vec2d attackBwL { 0, 0 }, attackBwR { 0, 0 };
 
-    bool onPlacementHandler(GameModel *model, const Cursor &cursor) override;
-};
-
-class WQueen : public Queen
+class WQueen : public Queen, public WhiteMovable
 {
 public:
     uint8_t view() const override { return 'W'; }
     stf::ColorTable color() const override { return stf::ColorTable::White; }
+
+    WQueen()
+    {
+        moveBwL   = { -1, -1 },   moveBwR = { +1, -1 };
+        attackBwL = { -2, -2 }, attackBwR = { +2, -2 };
+    }
 };
 
-class BQueen : public Queen
+class BQueen : public Queen, public BlackMovable
 {
 public:
     uint8_t view() const override { return 'B'; }
     stf::ColorTable color() const override { return stf::ColorTable::Black; }
+
+    BQueen()
+    {
+        moveBwL   = { -1, +1 };   moveBwR = { +1, +1 };
+        attackBwL = { -2, +2 }; attackBwR = { +2, +2 };
+    }
 };
 
 template<typename T> class CellCreator

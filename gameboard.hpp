@@ -13,34 +13,14 @@ class GameBoard
 {
 public:
     GameBoard();
-    BoardCell* operator[](const stf::Vec2d& p) {
-        int i = Size.x * p.y + p.x;
-        if(i < 0 || i > Size.x * Size.y - 1)
-            throw std::out_of_range(std::string("index = ") + std::to_string(i));
-        return board.at(i);
-    }
 
-    bool place(const stf::Vec2d& p, BoardCell* cell) {
-        int i = Size.x * p.y + p.x;
-        if(i < 0 || i > Size.x * Size.y - 1)
-            throw std::out_of_range(std::string("index = ") + std::to_string(i));
-        else board.at(Size.x * p.y + p.x) = cell;
-        return true;
-    }
+    BoardCell* operator[](const stf::Vec2d& p);
 
-    bool clear(const stf::Vec2d& p) {
-        return place(p, emptyCell());
-    }
+    bool place(const stf::Vec2d& p, BoardCell* cell);
+    bool clear(const stf::Vec2d& p);
 
-    bool objectIsInBlackZone(const stf::Vec2d& pos) const {
-        int indx = Size.x * pos.y + pos.x;
-        return indx >= Size.x * Size.y - Size.x && indx < Size.x * Size.y;
-    }
-
-    bool objectIsInWhiteZone(const stf::Vec2d& pos) const {
-        int indx = Size.x * pos.y + pos.x;
-        return indx >= 0 && indx < Size.x;
-    }
+    bool objectIsInBlackZone(const stf::Vec2d& pos) const;
+    bool objectIsInWhiteZone(const stf::Vec2d& pos) const;
 
     BoardCell* getSelectedCell(const Cursor& cursor);
     BoardCell* getSelectableCell(const Cursor& cursor);
