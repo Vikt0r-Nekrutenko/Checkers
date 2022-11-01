@@ -21,6 +21,15 @@ auto attackIsAvailiable = [](GameModel *model, const Cursor& cursor, const stf::
     return false;
 };
 
+auto attackIsPossible = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
+{
+    if(model->board.getSelectableCell(cursor) == GameBoard::emptyCell() &&
+       cursor.selectedCell.pos + attackDirection == cursor.selectableCell.pos &&
+       isOpponent(model, cursor, moveDirection))
+        return true;
+    return false;
+};
+
 
 
 bool MovableObject::lMoveIsPossible(GameModel *model, const Cursor& cursor)
@@ -41,20 +50,12 @@ bool MovableObject::rMoveIsPossible(GameModel *model, const Cursor& cursor)
 
 bool MovableObject::lAttackIsPossible(GameModel *model, const Cursor& cursor)
 {
-    if(model->board.getSelectableCell(cursor) == GameBoard::emptyCell() &&
-       cursor.selectedCell.pos + attackDirectionL == cursor.selectableCell.pos &&
-       isOpponent(model, cursor, moveDirectionL))
-        return true;
-    return false;
+    return attackIsPossible(model, cursor, moveDirectionL, attackDirectionL);
 }
 
 bool MovableObject::rAttackIsPossible(GameModel *model, const Cursor& cursor)
 {
-    if(model->board.getSelectableCell(cursor) == GameBoard::emptyCell() &&
-       cursor.selectedCell.pos + attackDirectionR == cursor.selectableCell.pos &&
-       isOpponent(model, cursor, moveDirectionR))
-        return true;
-    return false;
+    return attackIsPossible(model, cursor, moveDirectionR, attackDirectionR);
 }
 
 bool MovableObject::lAttackAvailiable(GameModel *model, const Cursor& cursor) const
