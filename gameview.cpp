@@ -20,7 +20,8 @@ void GameView::show(stf::Renderer &renderer)
                 renderer.drawPixel({x*3+1, y+2}, c->view());
         }
     }
-//    if(*model->cursor.selectedCell.cell != EmptyCheckerCell())
+
+    if(model->cursor.selectedCell.cell != GameBoard::emptyCell())
     {
         renderer.drawPixel({model->cursor.selectedCell.pos.x * 3 + 0, model->cursor.selectedCell.pos.y + 2}, '<');
         renderer.drawPixel({model->cursor.selectedCell.pos.x * 3 + 2, model->cursor.selectedCell.pos.y + 2}, '>');
