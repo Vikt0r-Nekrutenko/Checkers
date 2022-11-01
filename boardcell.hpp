@@ -5,6 +5,8 @@
 #include "fieldsallocator.hpp"
 #include <cstddef>
 
+class GameModel;
+struct Cursor;
 
 class BoardCell
 {
@@ -15,6 +17,7 @@ public:
     }
 
     virtual uint8_t view() const = 0;
+    virtual bool onPlacementHandler(GameModel *model, const Cursor& cursor) = 0;
 
     static stf::sdb::DynamicFieldsAllocator _cellAllocator;
 };
@@ -25,6 +28,10 @@ public:
     uint8_t view() const override
     {
         return 'e';
+    }
+    bool onPlacementHandler(GameModel*, const Cursor&) override
+    {
+        return true;
     }
 };
 

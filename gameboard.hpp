@@ -7,7 +7,7 @@
 #include "boardcell.hpp"
 
 class BoardCell;
-class Cursor;
+struct Cursor;
 
 class GameBoard
 {

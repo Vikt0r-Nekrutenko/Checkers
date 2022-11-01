@@ -22,8 +22,8 @@ void GameView::show(stf::Renderer &renderer)
     }
 //    if(*model->cursor.selectedCell.cell != EmptyCheckerCell())
     {
-        renderer.drawPixel({model->cursor.selectedCell.pos.x * 3 + 0, model->cursor.selectedCell.pos.y + 2}, '{');
-        renderer.drawPixel({model->cursor.selectedCell.pos.x * 3 + 2, model->cursor.selectedCell.pos.y + 2}, '}');
+        renderer.drawPixel({model->cursor.selectedCell.pos.x * 3 + 0, model->cursor.selectedCell.pos.y + 2}, '<');
+        renderer.drawPixel({model->cursor.selectedCell.pos.x * 3 + 2, model->cursor.selectedCell.pos.y + 2}, '>');
     }
 
     renderer.drawPixel({model->cursor.selectableCell.pos.x * 3 + 0, model->cursor.selectableCell.pos.y + 2}, '[');

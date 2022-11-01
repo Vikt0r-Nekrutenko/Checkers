@@ -17,8 +17,11 @@ struct Cursor
 
     bool cursorIsEmpty() const
     {
-        return selectedCell.cell == selectableCell.cell && selectableCell.cell == GameBoard::emptyCell();
+        return selectableIsEmpty() && selectedIsEmpty();
     }
+
+    bool selectedIsEmpty() const { return selectedCell.cell == GameBoard::emptyCell(); }
+    bool selectableIsEmpty() const { return selectableCell.cell == GameBoard::emptyCell(); }
 
     void reset() { selectedCell.cell = selectableCell.cell = GameBoard::emptyCell(); }
 };
