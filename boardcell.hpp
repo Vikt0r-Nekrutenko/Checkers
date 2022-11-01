@@ -69,7 +69,6 @@ public:
     virtual bool lAttackIsPossible(GameModel *model, const Cursor& cursor);
     virtual bool rAttackIsPossible(GameModel *model, const Cursor& cursor);
 
-    virtual bool isFightAvailiable(GameModel *model, const Cursor& cursor) const;
     virtual bool rAttackAvailiable(GameModel *model, const Cursor& cursor) const;
     virtual bool lAttackAvailiable(GameModel *model, const Cursor& cursor) const;
 };

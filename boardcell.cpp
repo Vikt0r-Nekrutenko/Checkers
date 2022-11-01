@@ -76,21 +76,6 @@ bool MovableObject::rAttackAvailiable(GameModel *model, const Cursor& cursor) co
     return attackIsAvailiable(model, cursor, moveFwR, attackFwR);
 }
 
-bool MovableObject::isFightAvailiable(GameModel *model, const Cursor& cursor) const
-{
-    try {
-        BoardCell *lCellBehindOpponent = model->board[cursor.selectedCell.pos + attackFwL];
-        BoardCell *rCellBehindOpponent = model->board[cursor.selectedCell.pos + attackFwR];
-
-        if((isOpponent(model, cursor, moveFwL) && lCellBehindOpponent == GameBoard::emptyCell()) ||
-           (isOpponent(model, cursor, moveFwR) && rCellBehindOpponent == GameBoard::emptyCell()))
-            return true;
-    } catch(const std::out_of_range& ex) {
-        return false;
-    }
-    return false;
-}
-
 bool MovableObject::onPlacementHandler(GameModel *model, const Cursor &cursor)
 {
     if(rAttackAvailiable(model, cursor)) {
