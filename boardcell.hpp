@@ -60,8 +60,8 @@ public:
     virtual bool lAttackAvailiable(GameModel *model, const Cursor& cursor) const;
 
 
-    stf::Vec2d   moveDirectionL { 0, 0 },   moveDirectionR { 0, 0 };
-    stf::Vec2d attackDirectionL { 0, 0 }, attackDirectionR { 0, 0 };
+    stf::Vec2d   moveFwL { 0, 0 },   moveFwR { 0, 0 };
+    stf::Vec2d attackBwL { 0, 0 }, attackFwR { 0, 0 };
 };
 
 class WhiteObject : public MovableObject
@@ -71,8 +71,8 @@ public:
     stf::ColorTable color() const override { return stf::ColorTable::White; }
     WhiteObject() : MovableObject()
     {
-        moveDirectionL   = { -1, +1 };   moveDirectionR = { +1, +1 };
-        attackDirectionL = { -2, +2 }; attackDirectionR = { +2, +2 };
+        moveFwL   = { -1, +1 };   moveFwR = { +1, +1 };
+        attackBwL = { -2, +2 }; attackFwR = { +2, +2 };
     }
 };
 
@@ -84,8 +84,8 @@ public:
 
     BlackObject() : MovableObject()
     {
-        moveDirectionL   = { -1, -1 },   moveDirectionR = { +1, -1 };
-        attackDirectionL = { -2, -2 }, attackDirectionR = { +2, -2 };
+        moveFwL   = { -1, -1 },   moveFwR = { +1, -1 };
+        attackBwL = { -2, -2 }, attackFwR = { +2, -2 };
     }
 };
 
