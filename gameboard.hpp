@@ -26,7 +26,14 @@ public:
     const stf::Vec2d Size { 8, 8 };
     std::vector<BoardCell*> board;
 
-    static CellCreator<EmptyCell> emptyCell;
+    static CellCreator<EmptyCell>   emptyCell;
+    static CellCreator<WhiteObject> whitePlayer;
+    static CellCreator<BlackObject> blackPlayer;
+
+    static CellCreator<WChecker>    whiteChecker;
+    static CellCreator<BChecker>    blackChecker;
+    static CellCreator<WQueen>      whiteQueen;
+    static CellCreator<BQueen>      blackQueen;
 };
 
 #endif // GAMEBOARD_HPP

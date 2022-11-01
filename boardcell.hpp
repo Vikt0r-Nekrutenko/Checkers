@@ -39,6 +39,10 @@ public:
 class WhiteObject : public BoardCell
 {
 public:
+    uint8_t view() const override { return 'W'; }
+    bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
+
+
     stf::Vec2d   moveDirectionL { -1, +1 },   moveDirectionR { +1, +1 };
     stf::Vec2d attackDirectionL { -2, +2 }, attackDirectionR { +2, +2 };
 };
@@ -46,6 +50,9 @@ public:
 class BlackObject : public BoardCell
 {
 public:
+    uint8_t view() const override { return 'B'; }
+    bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
+
     stf::Vec2d   moveDirectionL { -1, -1 },   moveDirectionR { +1, -1 };
     stf::Vec2d attackDirectionL { -2, -2 }, attackDirectionR { +2, -2 };
 };
@@ -53,25 +60,29 @@ public:
 class WChecker : public WhiteObject
 {
 public:
-    bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
+    uint8_t view() const override { return 'w'; }
+    bool onPlacementHandler(GameModel*, const Cursor&) override;
 };
 
 class WQueen : public WhiteObject
 {
 public:
-    bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
+    uint8_t view() const override { return 'W'; }
+    bool onPlacementHandler(GameModel*, const Cursor&) override;
 };
 
 class BChecker : public BlackObject
 {
 public:
-    bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
+    uint8_t view() const override { return 'b'; }
+    bool onPlacementHandler(GameModel*, const Cursor&) override;
 };
 
 class BQueen : public BlackObject
 {
 public:
-    bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
+    uint8_t view() const override { return 'B'; }
+    bool onPlacementHandler(GameModel*, const Cursor&) override;
 };
 
 template<typename T> class CellCreator
