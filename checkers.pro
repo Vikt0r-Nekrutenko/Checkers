@@ -5,6 +5,7 @@ CONFIG -= qt
 
 SOURCES += \
         boardcell.cpp \
+        cursor.cpp \
         gameboard.cpp \
         gamemodel.cpp \
         gameview.cpp \
@@ -21,6 +22,7 @@ DEPENDPATH += $$PWD/../stf \
 
 HEADERS += \
     boardcell.hpp \
+    cursor.hpp \
     gameboard.hpp \
     gamemodel.hpp \
     gameview.hpp

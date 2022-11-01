@@ -22,7 +22,7 @@ class Game : public stf::Window
 
     void keyEvents(const int key) final
     {
-//        currentView = currentView->keyEventsHandler(key);
+        currentView = currentView->keyEventsHandler(key);
     }
 
     void mouseEvents(const stf::MouseRecord&) final
