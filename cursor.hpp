@@ -15,16 +15,13 @@ struct Cursor
     Selector selectableCell;
     Selector selectedCell;
 
-    bool cursorIsEmpty() const
-    {
-        return selectableIsEmpty() && selectedIsEmpty();
-    }
+    bool cursorIsEmpty() const;
 
-    bool selectedIsEmpty() const { return selectedCell.cell == GameBoard::emptyCell(); }
-    bool selectableIsEmpty() const { return selectableCell.cell == GameBoard::emptyCell(); }
+    bool selectedIsEmpty() const;
+    bool selectableIsEmpty() const;
 
-    void reset() { selectedCell.cell = selectableCell.cell = GameBoard::emptyCell(); }
-    void select(BoardCell *cell) { selectedCell.pos = selectableCell.pos; selectedCell.cell = selectableCell.cell = cell; }
+    void reset();
+    void select(BoardCell *cell);
 };
 
 #endif // CURSOR_HPP
