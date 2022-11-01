@@ -228,11 +228,11 @@ stf::smv::IView* GameModel::put(stf::smv::IView *sender)
     BoardCell *cell = get(m_cursor.selectableCell.pos);
     Selector &sc = m_cursor.selectableCell;
     Selector &dc = m_cursor.selectedCell;
-    if(sc.cell == dc.cell && *sc.cell != EmptyCheckerCell() && sc.cell->onPlacementHandler(this, m_cursor)) {
+    if(sc.cell == dc.cell && sc.cell != BoardCellFactory::emptyCell.create() && sc.cell->onPlacementHandler(this, m_cursor)) {
         place(sc);
         sc.cell = dc.cell = BoardCellFactory::emptyCell.create();
         switchPlayer();
-    } else if(*cell != EmptyCheckerCell()) {
+    } else if(get(sc.pos) == player) {
         m_cursor.selectedCell.pos = m_cursor.selectableCell.pos;
         m_cursor.selectedCell.cell = m_cursor.selectableCell.cell = cell;
     }
