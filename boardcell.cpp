@@ -59,12 +59,12 @@ bool MovableObject::isFightAvailiable(GameModel *model, const Cursor& cursor) co
 bool MovableObject::onPlacementHandler(GameModel *model, const Cursor &cursor)
 {
     if(isFightAvailiable(model, cursor)) {
+        model->board.clear(cursor.selectedCell.pos);
+
         if(rAttackIsPossible(model, cursor)) {
-            model->board.clear(cursor.selectedCell.pos);
             model->board.clear(cursor.selectedCell.pos + moveDirectionR);
             return true;
         } else if(lAttackIsPossible(model, cursor)) {
-            model->board.clear(cursor.selectedCell.pos);
             model->board.clear(cursor.selectedCell.pos + moveDirectionL);
             return true;
         }
