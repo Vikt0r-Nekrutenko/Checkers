@@ -10,7 +10,8 @@ auto isOpponent = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& d
 bool MovableObject::lMoveIsPossible(GameModel *model, const Cursor& cursor)
 {
     if(model->board.getSelectableCell(cursor) == GameBoard::emptyCell()
-            && cursor.selectedCell.pos + moveDirectionL == cursor.selectableCell.pos)        return true;
+            && cursor.selectedCell.pos + moveDirectionL == cursor.selectableCell.pos)
+        return true;
     return false;
 }
 
@@ -42,12 +43,16 @@ bool MovableObject::rAttackIsPossible(GameModel *model, const Cursor& cursor)
 
 bool MovableObject::isFightAvailiable(GameModel *model, const Cursor& cursor) const
 {
-    BoardCell *lCellBehindOpponent = model->board[cursor.selectedCell.pos + attackDirectionL];
-    BoardCell *rCellBehindOpponent = model->board[cursor.selectedCell.pos + attackDirectionR];
+    try {
+        BoardCell *lCellBehindOpponent = model->board[cursor.selectedCell.pos + attackDirectionL];
+        BoardCell *rCellBehindOpponent = model->board[cursor.selectedCell.pos + attackDirectionR];
 
-    if((isOpponent(model, cursor, moveDirectionL) && lCellBehindOpponent == GameBoard::emptyCell()) ||
-       (isOpponent(model, cursor, moveDirectionR) && rCellBehindOpponent == GameBoard::emptyCell()))
-        return true;
+        if((isOpponent(model, cursor, moveDirectionL) && lCellBehindOpponent == GameBoard::emptyCell()) ||
+           (isOpponent(model, cursor, moveDirectionR) && rCellBehindOpponent == GameBoard::emptyCell()))
+            return true;
+    } catch(const std::out_of_range& ex) {
+        return false;
+    }
     return false;
 }
 

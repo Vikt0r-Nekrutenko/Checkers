@@ -28,15 +28,13 @@ public:
         Selector &sc = cursor.selectableCell;
         Selector &dc = cursor.selectedCell;
 
-        try {
-            if(!cursor.cursorIsEmpty() && sc.cell->onPlacementHandler(this, cursor)) {
-                board.place(cursor.selectableCell.pos, cursor.selectableCell.cell);
-                cursor.reset();
-                player = opponent();
-            } else if(cell->color() == player->color()) {
-                cursor.select(cell);
-            }
-        } catch(const std::out_of_range& ex) {  }
+        if(!cursor.cursorIsEmpty() && sc.cell->onPlacementHandler(this, cursor)) {
+            board.place(cursor.selectableCell.pos, cursor.selectableCell.cell);
+            cursor.reset();
+            player = opponent();
+        } else if(cell->color() == player->color()) {
+            cursor.select(cell);
+        }
 
         return sender;
     }
@@ -57,7 +55,7 @@ public:
 
     GameBoard board = GameBoard();
     Cursor cursor = Cursor();
-    BoardCell *player = GameBoard::whitePlayer();
+    BoardCell *player = GameBoard::blackPlayer();
 };
 
 #endif // GAMEMODEL_HPP
