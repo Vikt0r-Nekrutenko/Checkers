@@ -24,7 +24,7 @@ class EmptyCheckerCell;
 class WhiteCheckerCell;
 class BlackCheckerCell;
 
-class CheckerCell : public BoardCell {};
+class CheckerCell : public BoardCell { };
 
 class EmptyCheckerCell : public CheckerCell
 {
@@ -38,11 +38,11 @@ class MovableCheckerCell : public CheckerCell
 public:
     bool onPlacementHandler(GameModel *model, Cursor& cursor) final;
 
-    bool nextLMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
-    bool nextRMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
-    bool nextLFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
-    bool nextRFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
-    bool isFightAvailiable(GameModel *model, const Selector& selected) const;
+    virtual bool nextLMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
+    virtual bool nextRMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
+    virtual bool nextLFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
+    virtual bool nextRFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
+    virtual bool isFightAvailiable(GameModel *model, const Selector& selected) const;
 
     stf::Vec2d dirL { 0, 0 };
     stf::Vec2d dirR { 0, 0 };
@@ -69,6 +69,28 @@ public:
 
 
 
+class WhiteQCheckerCell : public MovableCheckerCell
+{
+public:
+    WhiteQCheckerCell() { dirL     = { -1, +1 };      dirR = { +1, +1 };
+                         fightDirL = { -2, +2 }; fightDirR = { +2, +2 }; }
+    inline uint8_t view() const final { return 'Q'; }
+
+    bool nextLMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable) override;
+    bool nextRMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable) override;
+    bool nextLFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable) override;
+    bool nextRFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable) override;
+    bool isFightAvailiable(GameModel *model, const Selector& selected) const override;
+};
+
+class BlackQCheckerCell : public MovableCheckerCell
+{
+public:
+    BlackQCheckerCell() { dirL     = { -1, -1 };      dirR = { +1, -1 };
+                         fightDirL = { -2, -2 }; fightDirR = { +2, -2 }; }
+    inline uint8_t view() const final { return 'X'; }
+};
+
 
 template<typename T> class BoardCellCreator
 {
@@ -83,11 +105,15 @@ public:
     static BoardCellCreator<EmptyCheckerCell> emptyCell;
     static BoardCellCreator<WhiteCheckerCell> whiteCell;
     static BoardCellCreator<BlackCheckerCell> blackCell;
+    static BoardCellCreator<WhiteQCheckerCell> whiteQCell;
+    static BoardCellCreator<BlackQCheckerCell> blackQCell;
 };
 
 BoardCellCreator<EmptyCheckerCell> BoardCellFactory::emptyCell = BoardCellCreator<EmptyCheckerCell>();
 BoardCellCreator<WhiteCheckerCell> BoardCellFactory::whiteCell = BoardCellCreator<WhiteCheckerCell>();
+BoardCellCreator<WhiteQCheckerCell> BoardCellFactory::whiteQCell = BoardCellCreator<WhiteQCheckerCell>();
 BoardCellCreator<BlackCheckerCell> BoardCellFactory::blackCell = BoardCellCreator<BlackCheckerCell>();
+BoardCellCreator<BlackQCheckerCell> BoardCellFactory::blackQCell = BoardCellCreator<BlackQCheckerCell>();
 
 struct Selector
 {
@@ -111,7 +137,7 @@ public:
         for(auto it = board.begin(); it != board.end(); ++it) {
             *it = BoardCellFactory::emptyCell.create();
         }
-        board.at(2) = BoardCellFactory::whiteCell.create();
+        board.at(2) = BoardCellFactory::whiteQCell.create();
         board.at(11) = BoardCellFactory::blackCell.create();
         board.at(29) = BoardCellFactory::blackCell.create();
     }
@@ -230,6 +256,18 @@ bool MovableCheckerCell::nextLMoveIsPossible(GameModel *model, const Selector& s
 bool MovableCheckerCell::nextRMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable)
 {
     if(model->get(selected.pos + dirR) == BoardCellFactory::emptyCell.create() && selected.pos + dirR == selectable.pos)
+        return true;
+    return false;
+}
+
+
+
+bool WhiteQCheckerCell::nextLMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable)
+{
+    stf::Vec2d div = selectable.pos - selected.pos;
+//    div.x = std::abs(div.x);
+    div.y = std::abs(div.y);
+    if(model->get(selectable.pos) == BoardCellFactory::emptyCell.create() && div == stf::Vec2d{-1,1})
         return true;
     return false;
 }
