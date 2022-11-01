@@ -4,6 +4,8 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        boardcell.cpp \
+        gameboard.cpp \
         gamemodel.cpp \
         gameview.cpp \
         main.cpp
@@ -18,5 +20,7 @@ DEPENDPATH += $$PWD/../stf \
                 $$PWD/../stf/sdb \
 
 HEADERS += \
+    boardcell.hpp \
+    gameboard.hpp \
     gamemodel.hpp \
     gameview.hpp
