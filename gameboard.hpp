@@ -20,6 +20,19 @@ public:
         return board.at(i);
     }
 
+    bool place(const stf::Vec2d& p, BoardCell* cell) {
+        int i = Size.x * p.y + p.x;
+        if(i < 0 || i > Size.x * Size.y - 1)
+            throw std::out_of_range(std::string("index = ") + std::to_string(i));
+        else board.at(Size.x * p.y + p.x) = cell;
+        return true;
+    }
+
+    bool clear(const stf::Vec2d& p) {
+        return place(p, emptyCell());
+    }
+
+
     BoardCell* getSelectedCell(const Cursor& cursor);
     BoardCell* getSelectableCell(const Cursor& cursor);
 

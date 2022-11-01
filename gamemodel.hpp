@@ -8,7 +8,12 @@
 class GameModel : public stf::smv::BaseModel
 {
 public:
-    GameModel() = default;
+    GameModel() : stf::smv::BaseModel()
+    {
+        board.place({2,0}, GameBoard::blackChecker());
+        board.place({3,1}, GameBoard::whiteChecker());
+        board.place({5,3}, GameBoard::whiteChecker());
+    }
 
     BoardCell *opponent() const {
         if (player == GameBoard::blackPlayer())
