@@ -3,6 +3,7 @@
 
 
 #include "fieldsallocator.hpp"
+#include "vec2d.hpp"
 #include <cstddef>
 
 class GameModel;
@@ -33,6 +34,44 @@ public:
     {
         return true;
     }
+};
+
+class WhiteObject : public BoardCell
+{
+public:
+    stf::Vec2d   moveDirectionL { -1, +1 },   moveDirectionR { +1, +1 };
+    stf::Vec2d attackDirectionL { -2, +2 }, attackDirectionR { +2, +2 };
+};
+
+class BlackObject : public BoardCell
+{
+public:
+    stf::Vec2d   moveDirectionL { -1, -1 },   moveDirectionR { +1, -1 };
+    stf::Vec2d attackDirectionL { -2, -2 }, attackDirectionR { +2, -2 };
+};
+
+class WChecker : public WhiteObject
+{
+public:
+    bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
+};
+
+class WQueen : public WhiteObject
+{
+public:
+    bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
+};
+
+class BChecker : public BlackObject
+{
+public:
+    bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
+};
+
+class BQueen : public BlackObject
+{
+public:
+    bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
 };
 
 template<typename T> class CellCreator
