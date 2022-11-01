@@ -101,7 +101,7 @@ struct Cursor
     Selector selectedCell;
 };
 
-bool BoardCell::onPlacementHandler(GameModel *model, Cursor&) { return true; }
+bool BoardCell::onPlacementHandler(GameModel *, Cursor&) { return true; }
 
 bool MovableCheckerCell::nextLMoveIsPossible(std::vector<BoardCell*>& board, const Selector& selected, const Selector& selectable)
 {
@@ -131,7 +131,7 @@ public:
         }
         board.at(2) = BoardCellFactory::whiteCell.create();
         board.at(11) = BoardCellFactory::blackCell.create();
-//        board.at(9) = BoardCellFactory::whiteCell.create();
+        board.at(29) = BoardCellFactory::blackCell.create();
     }
 
     BoardCell* get(const stf::Vec2d& pos) { return board.at(Size.x * pos.y + pos.x); }
@@ -176,15 +176,8 @@ bool MovableCheckerCell::onPlacementHandler(GameModel *model, Cursor& cursor)
 {
     Selector &sc = cursor.selectableCell;
     Selector &dc = cursor.selectedCell;
-    auto get = [&](const stf::Vec2d& p) { return model->board.at(8*p.y+p.x); };
     auto clearCell = [&](const Selector& s) { return model->board.at(8*s.pos.y+s.pos.x) = BoardCellFactory::emptyCell.create(); };
     auto clearCell1 = [&](const stf::Vec2d& s) { return model->board.at(8*s.y+s.x) = BoardCellFactory::emptyCell.create(); };
-
-    stf::Vec2d lbpp = dc.pos + stf::Vec2d(2,2);
-    stf::Vec2d rbpp = dc.pos + stf::Vec2d(-2,2);
-
-    BoardCell *lchup = get(dc.pos + stf::Vec2d(1,1));
-    BoardCell *rchup = get(dc.pos + stf::Vec2d(-1,1));
 
     if(isFightAvailiable(model, dc)) {
         if(nextRFightIsPossible(model, dc, sc)) {
@@ -206,31 +199,25 @@ bool MovableCheckerCell::onPlacementHandler(GameModel *model, Cursor& cursor)
 
 bool MovableCheckerCell::isFightAvailiable(GameModel *model, const Selector& selected) const
 {
-    auto get = [&](const stf::Vec2d& p) { return model->board.at(8 * p.y + p.x); };
-
-    if(get(selected.pos + dirL) == model->opponent() || get(selected.pos + dirR) == model->opponent())
+    if(model->get(selected.pos + dirL) == model->opponent() || model->get(selected.pos + dirR) == model->opponent())
         return true;
     return false;
 }
 
 bool MovableCheckerCell::nextLFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable)
 {
-    auto get = [&](const stf::Vec2d& p) { return model->board.at(8 * p.y + p.x); };
-
-    if(get(selected.pos + fightDirL) == BoardCellFactory::emptyCell.create() &&
+    if(model->get(selected.pos + fightDirL) == BoardCellFactory::emptyCell.create() &&
        selected.pos + fightDirL == selectable.pos &&
-       get(selected.pos + dirL) == model->opponent())
+       model->get(selected.pos + dirL) == model->opponent())
         return true;
     return false;
 }
 
 bool MovableCheckerCell::nextRFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable)
 {
-    auto get = [&](const stf::Vec2d& p) { return model->board.at(8 * p.y + p.x); };
-
-    if(get(selected.pos + fightDirR) == BoardCellFactory::emptyCell.create() &&
+    if(model->get(selected.pos + fightDirR) == BoardCellFactory::emptyCell.create() &&
        selected.pos + fightDirR == selectable.pos &&
-       get(selected.pos + dirR) == model->opponent())
+       model->get(selected.pos + dirR) == model->opponent())
         return true;
     return false;
 
@@ -244,6 +231,7 @@ stf::smv::IView* GameModel::put(stf::smv::IView *sender)
     if(sc.cell == dc.cell && *sc.cell != EmptyCheckerCell() && sc.cell->onPlacementHandler(this, m_cursor)) {
         place(sc);
         sc.cell = dc.cell = BoardCellFactory::emptyCell.create();
+        switchPlayer();
     } else if(*cell != EmptyCheckerCell()) {
         m_cursor.selectedCell.pos = m_cursor.selectableCell.pos;
         m_cursor.selectedCell.cell = m_cursor.selectableCell.cell = cell;
@@ -282,7 +270,7 @@ public:
 
 class Game : public stf::Window
 {
-    int n = 0;
+//    int n = 0;
     GameModel gameModel = GameModel();
     GameView gameView = GameView(&gameModel);
     stf::smv::IView *currentView = &gameView;
@@ -301,7 +289,7 @@ class Game : public stf::Window
         currentView = currentView->keyEventsHandler(key);
     }
 
-    void mouseEvents(const stf::MouseRecord& mr) final
+    void mouseEvents(const stf::MouseRecord&) final
     {
 
     }
