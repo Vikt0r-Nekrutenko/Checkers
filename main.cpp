@@ -38,8 +38,8 @@ class MovableCheckerCell : public CheckerCell
 public:
     bool onPlacementHandler(GameModel *model, Cursor& cursor) final;
 
-    bool nextLMoveIsPossible(std::vector<BoardCell*>& board, const Selector& selected, const Selector& selectable);
-    bool nextRMoveIsPossible(std::vector<BoardCell*>& board, const Selector& selected, const Selector& selectable);
+    bool nextLMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
+    bool nextRMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
     bool nextLFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
     bool nextRFightIsPossible(GameModel *model, const Selector& selected, const Selector& selectable);
     bool isFightAvailiable(GameModel *model, const Selector& selected) const;
@@ -103,24 +103,6 @@ struct Cursor
 
 bool BoardCell::onPlacementHandler(GameModel *, Cursor&) { return true; }
 
-bool MovableCheckerCell::nextLMoveIsPossible(std::vector<BoardCell*>& board, const Selector& selected, const Selector& selectable)
-{
-    auto get = [&](const stf::Vec2d& p) { return board.at(8 * p.y + p.x); };
-
-    if(get(selected.pos + dirL) == BoardCellFactory::emptyCell.create() && selected.pos + dirL == selectable.pos)
-        return true;
-    return false;
-}
-
-bool MovableCheckerCell::nextRMoveIsPossible(std::vector<BoardCell*>& board, const Selector& selected, const Selector& selectable)
-{
-    auto get = [&](const stf::Vec2d& p) { return board.at(8 * p.y + p.x); };
-
-    if(get(selected.pos + dirR) == BoardCellFactory::emptyCell.create() && selected.pos + dirR == selectable.pos)
-        return true;
-    return false;
-}
-
 class GameModel : public stf::smv::BaseModel
 {
 public:
@@ -140,7 +122,18 @@ public:
             return nullptr;
         return board.at(indx);
     }
-    void place(const Selector& s) { board.at(Size.x * s.pos.y + s.pos.x) = s.cell; }
+    void place(const Selector& s) {
+        int indx = Size.x * s.pos.y + s.pos.x;
+        if(indx < 0 || indx > 63)
+            return;
+        board.at(indx) = s.cell;
+    }
+    void place(const stf::Vec2d& p, CheckerCell *cell) {
+        int indx = Size.x * p.y + p.x;
+        if(indx < 0 || indx > 63)
+            return;
+        board.at(indx) = cell;
+    }
     void switchPlayer()
     {
         if(player == BoardCellFactory::whiteCell.create())
@@ -181,21 +174,19 @@ bool MovableCheckerCell::onPlacementHandler(GameModel *model, Cursor& cursor)
 {
     Selector &sc = cursor.selectableCell;
     Selector &dc = cursor.selectedCell;
-    auto clearCell = [&](const Selector& s) { return model->board.at(8*s.pos.y+s.pos.x) = BoardCellFactory::emptyCell.create(); };
-    auto clearCell1 = [&](const stf::Vec2d& s) { return model->board.at(8*s.y+s.x) = BoardCellFactory::emptyCell.create(); };
 
     if(isFightAvailiable(model, dc)) {
         if(nextRFightIsPossible(model, dc, sc)) {
-            clearCell(dc);
-            clearCell1(dc.pos + dirR);
+            model->place(dc.pos, BoardCellFactory::emptyCell.create());
+            model->place(dc.pos + dirR, BoardCellFactory::emptyCell.create());
             return true;
         } else if(nextLFightIsPossible(model, dc, sc)) {
-            clearCell(dc);
-            clearCell1(dc.pos + dirL);
+            model->place(dc.pos, BoardCellFactory::emptyCell.create());
+            model->place(dc.pos + dirL, BoardCellFactory::emptyCell.create());
             return true;
         }
-    } else if(nextRMoveIsPossible(model->board, dc, sc) || nextLMoveIsPossible(model->board, dc, sc)) {
-        clearCell(dc);
+    } else if(nextRMoveIsPossible(model, dc, sc) || nextLMoveIsPossible(model, dc, sc)) {
+        model->place(dc.pos, BoardCellFactory::emptyCell.create());
         return true;
     }
 
@@ -227,6 +218,20 @@ bool MovableCheckerCell::nextRFightIsPossible(GameModel *model, const Selector& 
         return true;
     return false;
 
+}
+
+bool MovableCheckerCell::nextLMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable)
+{
+    if(model->get(selected.pos + dirL) == BoardCellFactory::emptyCell.create() && selected.pos + dirL == selectable.pos)
+        return true;
+    return false;
+}
+
+bool MovableCheckerCell::nextRMoveIsPossible(GameModel *model, const Selector& selected, const Selector& selectable)
+{
+    if(model->get(selected.pos + dirR) == BoardCellFactory::emptyCell.create() && selected.pos + dirR == selectable.pos)
+        return true;
+    return false;
 }
 
 stf::smv::IView* GameModel::put(stf::smv::IView *sender)
