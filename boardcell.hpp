@@ -3,10 +3,12 @@
 
 
 #include "fieldsallocator.hpp"
-#include "vec2d.hpp"
+#include "renderer.hpp"
 #include <cstddef>
 
 class GameModel;
+class WhiteObject;
+class BlackObject;
 struct Cursor;
 
 class BoardCell
@@ -18,6 +20,7 @@ public:
     }
 
     virtual uint8_t view() const = 0;
+    virtual stf::ColorTable color() const = 0;
     virtual bool onPlacementHandler(GameModel *model, const Cursor& cursor) = 0;
 
     static stf::sdb::DynamicFieldsAllocator _cellAllocator;
@@ -30,6 +33,12 @@ public:
     {
         return 'e';
     }
+
+    stf::ColorTable color() const override
+    {
+        return stf::ColorTable::Default;
+    }
+
     bool onPlacementHandler(GameModel*, const Cursor&) override
     {
         return true;
@@ -40,8 +49,8 @@ class WhiteObject : public BoardCell
 {
 public:
     uint8_t view() const override { return 'W'; }
+    stf::ColorTable color() const override { return stf::ColorTable::White; }
     bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
-
 
     stf::Vec2d   moveDirectionL { -1, +1 },   moveDirectionR { +1, +1 };
     stf::Vec2d attackDirectionL { -2, +2 }, attackDirectionR { +2, +2 };
@@ -51,6 +60,7 @@ class BlackObject : public BoardCell
 {
 public:
     uint8_t view() const override { return 'B'; }
+    stf::ColorTable color() const override { return stf::ColorTable::Black; }
     bool onPlacementHandler(GameModel*, const Cursor&) override { return true; }
 
     stf::Vec2d   moveDirectionL { -1, -1 },   moveDirectionR { +1, -1 };

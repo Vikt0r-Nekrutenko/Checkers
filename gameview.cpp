@@ -30,4 +30,7 @@ void GameView::show(stf::Renderer &renderer)
     renderer.drawPixel({model->cursor.selectableCell.pos.x * 3 + 2, model->cursor.selectableCell.pos.y + 2}, ']');
 
     renderer.drawPixel({0,10}, model->player->view());
+    model->player->color() == stf::ColorTable::Black
+            ? renderer.drawText({2,10}, "Black")
+            : renderer.drawText({2,10}, "White");
 }

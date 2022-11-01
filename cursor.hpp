@@ -24,6 +24,7 @@ struct Cursor
     bool selectableIsEmpty() const { return selectableCell.cell == GameBoard::emptyCell(); }
 
     void reset() { selectedCell.cell = selectableCell.cell = GameBoard::emptyCell(); }
+    void select(BoardCell *cell) { selectedCell.pos = selectableCell.pos; selectedCell.cell = selectableCell.cell = cell; }
 };
 
 #endif // CURSOR_HPP

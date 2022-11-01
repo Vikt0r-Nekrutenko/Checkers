@@ -9,3 +9,4 @@ bool WQueen::onPlacementHandler(GameModel *, const Cursor &) { return true; }
 bool BChecker::onPlacementHandler(GameModel *, const Cursor &) { return true; }
 
 bool BQueen::onPlacementHandler(GameModel *, const Cursor &) { return true; }
+

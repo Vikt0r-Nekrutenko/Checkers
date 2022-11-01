@@ -24,17 +24,17 @@ public:
 
     stf::smv::IView* put(stf::smv::IView *sender)
     {
-        BoardCell *cell = board.getSelectedCell(cursor);
+        BoardCell *cell = board.getSelectableCell(cursor);
         Selector &sc = cursor.selectableCell;
         Selector &dc = cursor.selectedCell;
 
-        if(cursor.cursorIsEmpty() && sc.cell->onPlacementHandler(this, cursor)) {
+        if(!cursor.cursorIsEmpty() && sc.cell->onPlacementHandler(this, cursor)) {
 //            place(sc);
 //            sc.cell = dc.cell = BoardCellFactory::emptyCell.create();
-//            switchPlayer();
-        } else if(board.getSelectableCell(cursor) == player) {
-//            m_cursor.selectedCell.pos = m_cursor.selectableCell.pos;
-//            m_cursor.selectedCell.cell = m_cursor.selectableCell.cell = cell;
+            cursor.reset();
+            player = opponent();
+        } else if(cell->color() == player->color()) {
+            cursor.select(cell);
         }
 
         return sender;
