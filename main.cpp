@@ -16,8 +16,8 @@ class Game : public stf::Window
         if(currentView == nullptr)
             return false;
         currentView->show(renderer);
-        return n++ == 1 ? false : true;
-//        return true;
+//        return n++ == 1 ? false : true;
+        return true;
     }
 
     void keyEvents(const int key) final
@@ -34,5 +34,5 @@ class Game : public stf::Window
 int main()
 {
     Game().run();
-    BoardCell::_cellAllocator.info();
+//    BoardCell::_cellAllocator.info();
 }

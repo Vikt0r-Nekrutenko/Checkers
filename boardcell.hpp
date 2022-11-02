@@ -44,86 +44,31 @@ public:
     }
 };
 
-class ForwardMovable
-{
-public:
-    stf::Vec2d   moveFwL { 0, 0 },   moveFwR { 0, 0 };
-    stf::Vec2d attackFwL { 0, 0 }, attackFwR { 0, 0 };
-};
-
-class BackwardMovable
-{
-public:
-    stf::Vec2d   moveBwL { 0, 0 },   moveBwR { 0, 0 };
-    stf::Vec2d attackBwL { 0, 0 }, attackBwR { 0, 0 };
-};
-
-class MovableObject : public BoardCell, public ForwardMovable
-{
-public:
-    bool onPlacementHandler(GameModel*, const Cursor&) override;
-
-    virtual bool lMoveIsPossible(GameModel *model, const Cursor& cursor);
-    virtual bool rMoveIsPossible(GameModel *model, const Cursor& cursor);
-
-    virtual bool lAttackIsPossible(GameModel *model, const Cursor& cursor);
-    virtual bool rAttackIsPossible(GameModel *model, const Cursor& cursor);
-
-    virtual bool rAttackAvailiable(GameModel *model, const Cursor& cursor) const;
-    virtual bool lAttackAvailiable(GameModel *model, const Cursor& cursor) const;
-};
-
-class WhiteMovable : public ForwardMovable
-{
-public:
-    WhiteMovable() : ForwardMovable()
-    {
-        moveFwL   = { -1, +1 };   moveFwR = { +1, +1 };
-        attackFwL = { -2, +2 }; attackFwR = { +2, +2 };
-    }
-};
-
-class WhiteObject : public MovableObject
+class WhiteObject : public BoardCell
 {
 public:
     uint8_t view() const override { return 'W'; }
     stf::ColorTable color() const override { return stf::ColorTable::White; }
-    WhiteObject() : MovableObject()
+    bool onPlacementHandler(GameModel*, const Cursor&) override
     {
-        moveFwL   = { -1, +1 };   moveFwR = { +1, +1 };
-        attackFwL = { -2, +2 }; attackFwR = { +2, +2 };
+        return true;
     }
 };
 
-class BlackMovable : public ForwardMovable
-{
-public:
-    BlackMovable() : ForwardMovable()
-    {
-        moveFwL   = { -1, -1 },   moveFwR = { +1, -1 };
-        attackFwL = { -2, -2 }, attackFwR = { +2, -2 };
-    }
-};
-
-class BlackObject : public MovableObject
+class BlackObject : public BoardCell
 {
 public:
     uint8_t view() const override { return 'B'; }
     stf::ColorTable color() const override { return stf::ColorTable::Black; }
-
-    BlackObject() : MovableObject()
+    bool onPlacementHandler(GameModel*, const Cursor&) override
     {
-        moveFwL   = { -1, -1 },   moveFwR = { +1, -1 };
-        attackFwL = { -2, -2 }, attackFwR = { +2, -2 };
+        return true;
     }
 };
 
-class Queen : public MovableObject
+class Queen : public BoardCell
 {
 public:
-    stf::Vec2d   moveBwL { 0, 0 },   moveBwR { 0, 0 };
-    stf::Vec2d attackBwL { 0, 0 }, attackBwR { 0, 0 };
-
     bool onPlacementHandler(GameModel *model, const Cursor &cursor) override;
 };
 
@@ -131,40 +76,28 @@ class WChecker : public WhiteObject
 {
 public:
     uint8_t view() const override { return 'w'; }
+    bool onPlacementHandler(GameModel*, const Cursor&) override;
 };
-
 
 class BChecker : public BlackObject
 {
 public:
     uint8_t view() const override { return 'b'; }
+    bool onPlacementHandler(GameModel*, const Cursor&) override;
 };
 
-
-class WQueen : public Queen, public WhiteMovable
+class WQueen : public Queen
 {
 public:
     uint8_t view() const override { return 'W'; }
     stf::ColorTable color() const override { return stf::ColorTable::White; }
-
-    WQueen()
-    {
-        moveBwL   = { -1, -1 },   moveBwR = { +1, -1 };
-        attackBwL = { -2, -2 }, attackBwR = { +2, -2 };
-    }
 };
 
-class BQueen : public Queen, public BlackMovable
+class BQueen : public Queen
 {
 public:
     uint8_t view() const override { return 'B'; }
     stf::ColorTable color() const override { return stf::ColorTable::Black; }
-
-    BQueen()
-    {
-        moveBwL   = { -1, +1 };   moveBwR = { +1, +1 };
-        attackBwL = { -2, +2 }; attackBwR = { +2, +2 };
-    }
 };
 
 template<typename T> class CellCreator

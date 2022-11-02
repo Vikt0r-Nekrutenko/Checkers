@@ -16,6 +16,7 @@ public:
 
     BoardCell* operator[](const stf::Vec2d& p);
 
+    bool place(const int i, BoardCell* cell);
     bool place(const stf::Vec2d& p, BoardCell* cell);
     bool clear(const stf::Vec2d& p);
 

@@ -25,6 +25,14 @@ BoardCell *GameBoard::operator[](const stf::Vec2d &p) {
     return board.at(i);
 }
 
+bool GameBoard::place(const int i, BoardCell *cell)
+{
+    if(i < 0 || i > Size.x * Size.y - 1)
+        throw std::out_of_range(std::string("index = ") + std::to_string(i));
+    else board.at(i) = cell;
+    return true;
+}
+
 bool GameBoard::place(const stf::Vec2d &p, BoardCell *cell) {
     int i = Size.x * p.y + p.x;
     if(i < 0 || i > Size.x * Size.y - 1)

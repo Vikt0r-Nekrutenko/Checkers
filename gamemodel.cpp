@@ -2,9 +2,35 @@
 
 GameModel::GameModel() : stf::smv::BaseModel()
 {
-    board.place({2,0}, GameBoard::whiteChecker());
-    board.place({3,1}, GameBoard::blackChecker());
-    board.place({5,3}, GameBoard::blackChecker());
+    board.place(1, GameBoard::whiteChecker());
+    board.place(3, GameBoard::whiteChecker());
+    board.place(5, GameBoard::whiteChecker());
+    board.place(7, GameBoard::whiteChecker());
+
+    board.place(8, GameBoard::whiteChecker());
+    board.place(10, GameBoard::whiteChecker());
+    board.place(12, GameBoard::whiteChecker());
+    board.place(14, GameBoard::whiteChecker());
+
+    board.place(17, GameBoard::whiteChecker());
+    board.place(19, GameBoard::whiteChecker());
+    board.place(21, GameBoard::whiteChecker());
+    board.place(23, GameBoard::whiteChecker());
+
+    board.place(39+1, GameBoard::blackChecker());
+    board.place(39+3, GameBoard::blackChecker());
+    board.place(39+5, GameBoard::blackChecker());
+    board.place(39+7, GameBoard::blackChecker());
+
+    board.place(39+10, GameBoard::blackChecker());
+    board.place(39+12, GameBoard::blackChecker());
+    board.place(39+14, GameBoard::blackChecker());
+    board.place(39+16, GameBoard::blackChecker());
+
+    board.place(39+17, GameBoard::blackChecker());
+    board.place(39+19, GameBoard::blackChecker());
+    board.place(39+21, GameBoard::blackChecker());
+    board.place(39+23, GameBoard::blackChecker());
 }
 
 BoardCell *GameModel::opponent() const {
