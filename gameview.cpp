@@ -30,10 +30,9 @@ void GameView::show(stf::Renderer &renderer)
     renderer.drawPixel({model->cursor.selectableCell.pos.x * 3 + 0, model->cursor.selectableCell.pos.y + 2}, '[');
     renderer.drawPixel({model->cursor.selectableCell.pos.x * 3 + 2, model->cursor.selectableCell.pos.y + 2}, ']');
 
-    renderer.drawPixel({0,10}, model->player->view());
     model->player->color() == stf::ColorTable::Black
-            ? renderer.drawText({2,10}, "Black")
-            : renderer.drawText({2,10}, "White");
+            ? renderer.drawText({0,10}, "Black player turn")
+            : renderer.drawText({0,10}, "White player turn");
 
     if(model->board.objectIsInBlackZone(model->cursor.selectableCell.pos))
         renderer.drawText({0,11}, "In black zone.");

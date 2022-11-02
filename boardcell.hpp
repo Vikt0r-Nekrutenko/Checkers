@@ -18,9 +18,9 @@ public:
     {
         return _cellAllocator.allocate(size);
     }
-    virtual uint8_t view() const = 0;
-    virtual stf::ColorTable color() const = 0;
-    virtual bool onPlacementHandler(GameModel *model, const Cursor& cursor) = 0;
+    virtual uint8_t view() const { return 0; }
+    virtual stf::ColorTable color() const { return stf::ColorTable::Default; }
+    virtual bool onPlacementHandler(GameModel *, const Cursor&) { return true; }
 
     static stf::sdb::DynamicFieldsAllocator _cellAllocator;
 };
@@ -32,38 +32,21 @@ public:
     {
         return 'e';
     }
-
-    stf::ColorTable color() const override
-    {
-        return stf::ColorTable::Default;
-    }
-
-    bool onPlacementHandler(GameModel*, const Cursor&) override
-    {
-        return true;
-    }
 };
 
-class Player : public BoardCell
-{
-public:
-    uint8_t view() const override { return 'p'; }
-    bool onPlacementHandler(GameModel *, const Cursor &) override { return true; };
-};
-
-class WhitePlayer : public Player
+class WhitePlayer : virtual public BoardCell
 {
 public:
     stf::ColorTable color() const override { return stf::ColorTable::White; }
 };
 
-class BlackPlayer : public Player
+class BlackPlayer : virtual public BoardCell
 {
 public:
     stf::ColorTable color() const override { return stf::ColorTable::Black; }
 };
 
-class Checker : public BoardCell
+class Checker : virtual public BoardCell
 {
 public:
     bool onPlacementHandler(GameModel *model, const Cursor &cursor) override;
@@ -72,7 +55,7 @@ public:
     stf::Vec2d rAttackFw = {0,0}, lAttackFw = {0,0};
 };
 
-class Queen : public BoardCell
+class Queen : virtual public BoardCell
 {
 public:
     bool onPlacementHandler(GameModel *model, const Cursor &cursor) override;
@@ -84,7 +67,7 @@ public:
     stf::Vec2d rAttackBw = {+2,-2}, lAttackBw = {-2,-2};
 };
 
-class WChecker : public Checker
+class WChecker : public Checker, public WhitePlayer
 {
 public:
     WChecker()
@@ -93,10 +76,10 @@ public:
         rAttackFw = {+2,+2}, lAttackFw = {-2,+2};
     }
     uint8_t view() const override { return 'w'; }
-    stf::ColorTable color() const override { return stf::ColorTable::White; }
+    using WhitePlayer::color;
 };
 
-class BChecker : public Checker
+class BChecker : public Checker, public BlackPlayer
 {
 public:
     BChecker()
@@ -105,21 +88,21 @@ public:
         rAttackFw = {+2,-2}, lAttackFw = {-2,-2};
     }
     uint8_t view() const override { return 'b'; }
-    stf::ColorTable color() const override { return stf::ColorTable::Black; }
+    using BlackPlayer::color;
 };
 
-class WQueen : public Queen
+class WQueen : public Queen, public WhitePlayer
 {
 public:
     uint8_t view() const override { return 'W'; }
-    stf::ColorTable color() const override { return stf::ColorTable::White; }
+    using WhitePlayer::color;
 };
 
-class BQueen : public Queen
+class BQueen : public Queen, public BlackPlayer
 {
 public:
     uint8_t view() const override { return 'B'; }
-    stf::ColorTable color() const override { return stf::ColorTable::Black; }
+    using BlackPlayer::color;
 };
 
 template<typename T> class CellCreator
