@@ -7,7 +7,7 @@ auto isOpponent = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& d
     return model->board[cursor.selectedCell.pos + direction]->color() == model->opponent()->color();
 };
 
-auto attackIsAvailiable = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
+auto _attackIsAvailiable = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
 {
     try {
         BoardCell *lCellBehindOpponent = model->board[cursor.selectedCell.pos + attackDirection];
@@ -21,7 +21,7 @@ auto attackIsAvailiable = [](GameModel *model, const Cursor& cursor, const stf::
     return false;
 };
 
-auto attackIsPossible = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
+auto _attackIsPossible = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
 {
     if(model->board.getSelectableCell(cursor) == GameBoard::emptyCell() &&
        cursor.selectedCell.pos + attackDirection == cursor.selectableCell.pos &&
@@ -30,7 +30,7 @@ auto attackIsPossible = [](GameModel *model, const Cursor& cursor, const stf::Ve
     return false;
 };
 
-auto moveIsPossible = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection)
+auto _moveIsPossible = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection)
 {
     if(model->board.getSelectableCell(cursor) == GameBoard::emptyCell()
             && cursor.selectedCell.pos + moveDirection == cursor.selectableCell.pos)
@@ -40,56 +40,68 @@ auto moveIsPossible = [](GameModel *model, const Cursor& cursor, const stf::Vec2
 
 bool Checker::onPlacementHandler(GameModel *model, const Cursor &cursor)
 {
-    if(attackIsAvailiable(model, cursor, rMoveFw, rAttackFw)) {
-        if(attackIsPossible(model, cursor, rMoveFw, rAttackFw)) {
+    if(_attackIsAvailiable(model, cursor, rMoveFw, rAttackFw)) {
+        if(_attackIsPossible(model, cursor, rMoveFw, rAttackFw)) {
             model->board.clear(cursor.selectedCell.pos);
             model->board.clear(cursor.selectedCell.pos + rMoveFw);
             return true;
         } return false;
-    } else if(attackIsAvailiable(model, cursor, lMoveFw, lAttackFw)) {
-        if(attackIsPossible(model, cursor, lMoveFw, lAttackFw)) {
+    } else if(_attackIsAvailiable(model, cursor, lMoveFw, lAttackFw)) {
+        if(_attackIsPossible(model, cursor, lMoveFw, lAttackFw)) {
             model->board.clear(cursor.selectedCell.pos);
             model->board.clear(cursor.selectedCell.pos + lMoveFw);
             return true;
         } return false;
-    } else if(moveIsPossible(model, cursor, rMoveFw) || moveIsPossible(model, cursor, lMoveFw)) {
+    } else if(_moveIsPossible(model, cursor, rMoveFw) || _moveIsPossible(model, cursor, lMoveFw)) {
         model->board.clear(cursor.selectedCell.pos);
         return true;
     } return false;
 }
 
+bool Checker::attackIsAvailiable(GameModel *model, const Cursor &cursor)
+{
+    return _attackIsAvailiable(model, cursor, rMoveFw, rAttackFw) ||
+           _attackIsAvailiable(model, cursor, lMoveFw, lAttackFw);
+}
+
 bool Queen::onPlacementHandler(GameModel *model, const Cursor &cursor)
 {
-    if(attackIsAvailiable(model, cursor, rMoveFw, rAttackFw)) {
-        if(attackIsPossible(model, cursor, rMoveFw, rAttackFw)) {
+    if(_attackIsAvailiable(model, cursor, rMoveFw, rAttackFw)) {
+        if(_attackIsPossible(model, cursor, rMoveFw, rAttackFw)) {
             model->board.clear(cursor.selectedCell.pos);
             model->board.clear(cursor.selectedCell.pos + rMoveFw);
             return true;
         } return false;
-    } else if(attackIsAvailiable(model, cursor, rMoveBw, rAttackBw)) {
-        if(attackIsPossible(model, cursor, rMoveBw, rAttackBw)) {
+    } else if(_attackIsAvailiable(model, cursor, rMoveBw, rAttackBw)) {
+        if(_attackIsPossible(model, cursor, rMoveBw, rAttackBw)) {
             model->board.clear(cursor.selectedCell.pos);
             model->board.clear(cursor.selectedCell.pos + rMoveBw);
             return true;
         } return false;
-    } else if(attackIsAvailiable(model, cursor, lMoveFw, lAttackFw)) {
-        if(attackIsPossible(model, cursor, lMoveFw, lAttackFw)) {
+    } else if(_attackIsAvailiable(model, cursor, lMoveFw, lAttackFw)) {
+        if(_attackIsPossible(model, cursor, lMoveFw, lAttackFw)) {
             model->board.clear(cursor.selectedCell.pos);
             model->board.clear(cursor.selectedCell.pos + lMoveFw);
             return true;
         } return false;
-    } else if(attackIsAvailiable(model, cursor, lMoveBw, lAttackBw)) {
-        if(attackIsPossible(model, cursor, lMoveBw, lAttackBw)) {
+    } else if(_attackIsAvailiable(model, cursor, lMoveBw, lAttackBw)) {
+        if(_attackIsPossible(model, cursor, lMoveBw, lAttackBw)) {
             model->board.clear(cursor.selectedCell.pos);
             model->board.clear(cursor.selectedCell.pos + lMoveBw);
             return true;
         } return false;
-    } else if(moveIsPossible(model, cursor, rMoveFw) ||
-              moveIsPossible(model, cursor, rMoveBw) ||
-              moveIsPossible(model, cursor, lMoveFw) ||
-              moveIsPossible(model, cursor, lMoveBw))
+    } else if(_moveIsPossible(model, cursor, rMoveFw) ||
+              _moveIsPossible(model, cursor, rMoveBw) ||
+              _moveIsPossible(model, cursor, lMoveFw) ||
+              _moveIsPossible(model, cursor, lMoveBw))
     {
         model->board.clear(cursor.selectedCell.pos);
         return true;
     } return false;
+}
+
+bool Queen::attackIsAvailiable(GameModel *model, const Cursor &cursor)
+{
+    return _attackIsAvailiable(model, cursor, rMoveFw, rAttackFw) || _attackIsAvailiable(model, cursor, lMoveFw, lAttackFw) ||
+           _attackIsAvailiable(model, cursor, rMoveBw, rAttackBw) || _attackIsAvailiable(model, cursor, lMoveBw, lAttackBw);
 }
