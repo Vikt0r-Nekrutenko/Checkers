@@ -20,7 +20,7 @@ GameBoard::GameBoard()
 
 BoardCell *GameBoard::operator[](const stf::Vec2d &p) {
     int i = Size.x * p.y + p.x;
-    if(i < 0 || i > Size.x * Size.y - 1)
+    if(p.x < 0 || p.y || p.x >= Size.x || p.y >= Size.y)
         throw std::out_of_range(std::string("index = ") + std::to_string(i));
     return board.at(i);
 }
@@ -35,9 +35,9 @@ bool GameBoard::place(const int i, BoardCell *cell)
 
 bool GameBoard::place(const stf::Vec2d &p, BoardCell *cell) {
     int i = Size.x * p.y + p.x;
-    if(i < 0 || i > Size.x * Size.y - 1)
+    if(p.x < 0 || p.y || p.x >= Size.x || p.y >= Size.y)
         throw std::out_of_range(std::string("index = ") + std::to_string(i));
-    else board.at(Size.x * p.y + p.x) = cell;
+    else board.at(i) = cell;
     return true;
 }
 
