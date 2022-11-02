@@ -7,8 +7,8 @@
 #include <cstddef>
 
 class GameModel;
-class WhiteObject;
-class BlackObject;
+class WhitePlayer;
+class BlackPlayer;
 struct Cursor;
 
 class BoardCell
@@ -44,46 +44,68 @@ public:
     }
 };
 
-class WhiteObject : public BoardCell
+class Player : public BoardCell
 {
 public:
-    uint8_t view() const override { return 'W'; }
-    stf::ColorTable color() const override { return stf::ColorTable::White; }
-    bool onPlacementHandler(GameModel*, const Cursor&) override
-    {
-        return true;
-    }
+    uint8_t view() const override { return 'p'; }
+    bool onPlacementHandler(GameModel *, const Cursor &) override { return true; };
 };
 
-class BlackObject : public BoardCell
+class WhitePlayer : public Player
 {
 public:
-    uint8_t view() const override { return 'B'; }
+    stf::ColorTable color() const override { return stf::ColorTable::White; }
+};
+
+class BlackPlayer : public Player
+{
+public:
     stf::ColorTable color() const override { return stf::ColorTable::Black; }
-    bool onPlacementHandler(GameModel*, const Cursor&) override
-    {
-        return true;
-    }
+};
+
+class Checker : public BoardCell
+{
+public:
+    bool onPlacementHandler(GameModel *model, const Cursor &cursor) override;
+
+    stf::Vec2d rMoveFw   = {0,0}, lMoveFw   = {0,0};
+    stf::Vec2d rAttackFw = {0,0}, lAttackFw = {0,0};
 };
 
 class Queen : public BoardCell
 {
 public:
     bool onPlacementHandler(GameModel *model, const Cursor &cursor) override;
+
+    stf::Vec2d rMoveFw   = {+1,+1}, lMoveFw   = {-1,+1};
+    stf::Vec2d rAttackFw = {+2,+2}, lAttackFw = {-2,+2};
+
+    stf::Vec2d rMoveBw   = {+1,-1}, lMoveBw   = {-1,-1};
+    stf::Vec2d rAttackBw = {+2,-2}, lAttackBw = {-2,-2};
 };
 
-class WChecker : public WhiteObject
+class WChecker : public Checker
 {
 public:
+    WChecker()
+    {
+        rMoveFw   = {+1,+1}, lMoveFw   = {-1,+1};
+        rAttackFw = {+2,+2}, lAttackFw = {-2,+2};
+    }
     uint8_t view() const override { return 'w'; }
-    bool onPlacementHandler(GameModel*, const Cursor&) override;
+    stf::ColorTable color() const override { return stf::ColorTable::White; }
 };
 
-class BChecker : public BlackObject
+class BChecker : public Checker
 {
 public:
+    BChecker()
+    {
+        rMoveFw   = {+1,-1}, lMoveFw   = {-1,-1};
+        rAttackFw = {+2,-2}, lAttackFw = {-2,-2};
+    }
     uint8_t view() const override { return 'b'; }
-    bool onPlacementHandler(GameModel*, const Cursor&) override;
+    stf::ColorTable color() const override { return stf::ColorTable::Black; }
 };
 
 class WQueen : public Queen

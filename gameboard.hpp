@@ -30,8 +30,8 @@ public:
     std::vector<BoardCell*> board;
 
     static CellCreator<EmptyCell>   emptyCell;
-    static CellCreator<WhiteObject> whitePlayer;
-    static CellCreator<BlackObject> blackPlayer;
+    static CellCreator<WhitePlayer> whitePlayer;
+    static CellCreator<BlackPlayer> blackPlayer;
 
     static CellCreator<WChecker>    whiteChecker;
     static CellCreator<BChecker>    blackChecker;

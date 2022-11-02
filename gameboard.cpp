@@ -2,8 +2,8 @@
 #include "cursor.hpp"
 
 CellCreator<EmptyCell>   GameBoard::emptyCell   = CellCreator<EmptyCell>();
-CellCreator<WhiteObject> GameBoard::whitePlayer = CellCreator<WhiteObject>();
-CellCreator<BlackObject> GameBoard::blackPlayer = CellCreator<BlackObject>();
+CellCreator<WhitePlayer> GameBoard::whitePlayer = CellCreator<WhitePlayer>();
+CellCreator<BlackPlayer> GameBoard::blackPlayer = CellCreator<BlackPlayer>();
 
 CellCreator<WChecker>  GameBoard::whiteChecker  = CellCreator<WChecker>();
 CellCreator<BChecker>  GameBoard::blackChecker  = CellCreator<BChecker>();
