@@ -17,7 +17,7 @@ void GameView::show(stf::Renderer &renderer)
             if(c == GameBoard::emptyCell())
                 renderer.drawPixel({x*3+1, y+2}, '_');
             else
-                renderer.drawPixel({x*3+1, y+2}, c->view(), c->color());
+                renderer.drawPixel({x*3+1, y+2}, c->view());
         }
     }
 

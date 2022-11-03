@@ -17,7 +17,7 @@ bool Cursor::selectableIsEmpty() const
 
 bool Cursor::nextTurnWillBeAttack(GameModel *model) const
 {
-    return selectedCell.cell->attackIsAvailiable(model, *this);
+    return false;//selectedCell.cell->attackIsAvailiable(model, *this);
 }
 
 void Cursor::reset()
