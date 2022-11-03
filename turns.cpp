@@ -40,6 +40,8 @@ void MultiplyAttackTurn::turnHandler(GameModel *model)
 void MoveTurn::turnHandler(GameModel *model)
 {
     model->board.clear(model->cursor.selectedCell.pos);
+    model->board.place(model->cursor.selectableCell.pos, model->cursor.selectableCell.cell);
+
     model->placementAfterHandling();
     model->cursor.reset();
     model->player = model->opponent();

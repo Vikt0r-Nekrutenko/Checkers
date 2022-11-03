@@ -19,7 +19,7 @@ public:
 
     GameBoard board = GameBoard();
     Cursor cursor = Cursor();
-    BoardCell *player = GameBoard::blackPlayer();
+    BoardCell *player = GameBoard::whitePlayer();
 
     uint32_t exCount = 0ul;
     bool isSelect = true;
