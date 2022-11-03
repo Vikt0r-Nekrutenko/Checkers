@@ -15,10 +15,13 @@ struct Cursor
     Selector selectableCell;
     Selector selectedCell;
 
+    bool operator ==(const BoardCell *player)const;
     bool cursorIsEmpty() const;
 
     bool selectedIsEmpty() const;
     bool selectableIsEmpty() const;
+
+    bool nextTurnCanBeAttack(GameModel *model) const;
 
     void reset();
     void select(BoardCell *cell);

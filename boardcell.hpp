@@ -22,6 +22,7 @@ public:
     virtual stf::ColorTable color() const { return stf::ColorTable::Default; }
     virtual bool onPlacementHandler(GameModel *, const Cursor&) { return false; }
     virtual bool attackIsAvailiable(GameModel *, const Cursor&) { return false; }
+    virtual bool moveIsAvailiable(GameModel *, const Cursor&) { return true; }
 
     static stf::sdb::DynamicFieldsAllocator _cellAllocator;
 };
@@ -52,6 +53,7 @@ class Checker : virtual public BoardCell
 public:
     bool onPlacementHandler(GameModel *model, const Cursor &cursor) override;
     bool attackIsAvailiable(GameModel *model, const Cursor& cursor) override;
+    bool moveIsAvailiable(GameModel *model, const Cursor&cursor) override;
 
     stf::Vec2d rMoveFw   = {0,0}, lMoveFw   = {0,0};
     stf::Vec2d rAttackFw = {0,0}, lAttackFw = {0,0};

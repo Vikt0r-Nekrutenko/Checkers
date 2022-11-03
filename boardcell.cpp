@@ -61,7 +61,14 @@ bool Checker::onPlacementHandler(GameModel *model, const Cursor &cursor)
 bool Checker::attackIsAvailiable(GameModel *model, const Cursor &cursor)
 {
     return _attackIsAvailiable(model, cursor, rMoveFw, rAttackFw) ||
-           _attackIsAvailiable(model, cursor, lMoveFw, lAttackFw);
+            _attackIsAvailiable(model, cursor, lMoveFw, lAttackFw);
+}
+
+bool Checker::moveIsAvailiable(GameModel *model, const Cursor &cursor)
+{
+    return !attackIsAvailiable(model, cursor) &&
+            (_moveIsPossible(model, cursor, rMoveFw) ||
+             _moveIsPossible(model, cursor, lMoveFw));
 }
 
 bool Queen::onPlacementHandler(GameModel *model, const Cursor &cursor)

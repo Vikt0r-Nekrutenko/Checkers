@@ -1,6 +1,11 @@
 #include "cursor.hpp"
 
 
+bool Cursor::operator ==(const BoardCell *player) const
+{
+    return selectableCell.cell->color() == player->color();
+}
+
 bool Cursor::cursorIsEmpty() const
 {
     return selectableIsEmpty() && selectedIsEmpty();
@@ -14,6 +19,11 @@ bool Cursor::selectedIsEmpty() const
 bool Cursor::selectableIsEmpty() const
 {
     return selectableCell.cell == GameBoard::emptyCell();
+}
+
+bool Cursor::nextTurnCanBeAttack(GameModel *model) const
+{
+    return selectedCell.cell->attackIsAvailiable(model, *this);
 }
 
 void Cursor::reset()

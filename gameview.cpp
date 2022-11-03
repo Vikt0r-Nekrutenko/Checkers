@@ -40,4 +40,5 @@ void GameView::show(stf::Renderer &renderer)
         renderer.drawText({0,11}, "In white zone.");
 
     renderer.draw({0,12}, "Exception counter : %d", model->exCount);
+    if(model->cellUnAt) renderer.draw({0, 13}, "Cell under atttack exist!");
 }

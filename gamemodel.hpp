@@ -11,13 +11,18 @@ public:
     GameModel();
 
     BoardCell *opponent() const;
+    void placementAfterHandling();
     stf::smv::IView* put(stf::smv::IView *sender);
+    stf::smv::IView* select(stf::smv::IView *sender);
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) final;
 
     GameBoard board = GameBoard();
     Cursor cursor = Cursor();
     BoardCell *player = GameBoard::blackPlayer();
+
     uint32_t exCount = 0ul;
+    bool cellUnAt = false;
+    bool isSelect = true;
 };
 
 #endif // GAMEMODEL_HPP
