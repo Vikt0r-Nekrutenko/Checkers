@@ -33,7 +33,7 @@ GameModel::GameModel() : stf::smv::BaseModel()
 //    board.place(39+23, GameBoard::blackChecker());
 
 //    board.place({1,4}, GameBoard::blackChecker());
-    board.place({2,4}, GameBoard::blackQueen());
+    board.place({2,4}, GameBoard::blackChecker());
 
     board.place({3,1}, GameBoard::whiteChecker());
     board.place({1,3}, GameBoard::whiteChecker());
@@ -59,44 +59,15 @@ void GameModel::placementAfterHandling()
 
 stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 {
-    if(isSelect) {
-        BoardCell *cell = board.getSelectableCell(cursor);
+    BoardCell *cell = board.getSelectableCell(cursor);
 
-        if(cell->color() == player->color()) {
-            cursor.select(cell);
-            isSelect = false;
-        }
-    } else {
-        BoardCell *cell = board.getSelectedCell(cursor);
-        GameTurn *placementResult = cell->getNextTurn(this, cursor);
-        if(placementResult == turns::multiplyTurn()) {
-                            board.clear(cursor.selectedCell.pos);
-                            stf::Vec2d sub = cursor.selectableCell.pos - cursor.selectedCell.pos;
-                            stf::Vec2d norm = { sub.x / std::abs(sub.x), sub.y / std::abs(sub.y) };
-                            board.clear(cursor.selectedCell.pos + norm);
+    if(cell->color() == player->color())
+        cursor.select(cell);
 
-            placementAfterHandling();
-            cursor.select(board.getSelectableCell(cursor));
-        } else if (placementResult == turns::mustBeAttackingTurn()) {
-            exCount++;
-        } else if(placementResult == turns::moveTurn()) {
-                            board.clear(cursor.selectedCell.pos);
-            placementAfterHandling();
-            cursor.reset();
-            player = opponent();
-            isSelect = true;
-        } else if(placementResult == turns::attackTurn()) {
-                            board.clear(cursor.selectedCell.pos);
-                            stf::Vec2d sub = cursor.selectableCell.pos - cursor.selectedCell.pos;
-                            stf::Vec2d norm = { sub.x / std::abs(sub.x), sub.y / std::abs(sub.y) };
-                            board.clear(cursor.selectedCell.pos + norm);
+    cell = board.getSelectedCell(cursor);
+    GameTurn *placementResult = cell->getNextTurn(this, cursor);
+    placementResult->turnHandler(this);
 
-            placementAfterHandling();
-            cursor.reset();
-            player = opponent();
-            isSelect = true;
-        }
-    }
     return sender;
 }
 

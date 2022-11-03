@@ -1,5 +1,5 @@
 #include "turns.hpp"
-#include "boardcell.hpp"
+#include "gamemodel.hpp"
 
 void *GameTurn::operator new(size_t size)
 {
@@ -12,3 +12,36 @@ TurnsCreator<SimpleAttackTurn> turns::simpleTurn = TurnsCreator<SimpleAttackTurn
 TurnsCreator<MultiplyAttackTurn> turns::multiplyTurn = TurnsCreator<MultiplyAttackTurn>();
 TurnsCreator<MustBeAttackingTurn> turns::mustBeAttackingTurn = TurnsCreator<MustBeAttackingTurn>();
 TurnsCreator<MoveTurn> turns::moveTurn = TurnsCreator<MoveTurn>();
+
+void AttackTurn::turnHandler(GameModel *model)
+{
+    model->board.clear(model->cursor.selectedCell.pos);
+    stf::Vec2d sub = model->cursor.selectableCell.pos - model->cursor.selectedCell.pos;
+    stf::Vec2d norm = { sub.x / std::abs(sub.x), sub.y / std::abs(sub.y) };
+    model->board.clear(model->cursor.selectedCell.pos + norm);
+
+    model->placementAfterHandling();
+    model->cursor.reset();
+    model->player = model->opponent();
+    model->isSelect = true;
+}
+
+void MultiplyAttackTurn::turnHandler(GameModel *model)
+{
+    model->board.clear(model->cursor.selectedCell.pos);
+    stf::Vec2d sub = model->cursor.selectableCell.pos - model->cursor.selectedCell.pos;
+    stf::Vec2d norm = { sub.x / std::abs(sub.x), sub.y / std::abs(sub.y) };
+    model->board.clear(model->cursor.selectedCell.pos + norm);
+
+    model->placementAfterHandling();
+    model->cursor.select(model->board.getSelectableCell(model->cursor));
+}
+
+void MoveTurn::turnHandler(GameModel *model)
+{
+    model->board.clear(model->cursor.selectedCell.pos);
+    model->placementAfterHandling();
+    model->cursor.reset();
+    model->player = model->opponent();
+    model->isSelect = true;
+}
