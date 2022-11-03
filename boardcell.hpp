@@ -45,7 +45,7 @@ public:
 class BlackPlayer : virtual public BoardCell
 {
 public:
-    stf::ColorTable color() const override { return stf::ColorTable::Black; }
+    stf::ColorTable color() const override { return stf::ColorTable::Red; }
 };
 
 class Checker : virtual public BoardCell
@@ -62,6 +62,7 @@ public:
 class Queen : virtual public BoardCell
 {
 public:
+    uint8_t view() const override { return 'Q'; }
     bool onPlacementHandler(GameModel *model, const Cursor &cursor) override;
     bool attackIsAvailiable(GameModel *model, const Cursor& cursor) override;
 
@@ -99,15 +100,17 @@ public:
 class WQueen : public Queen, public WhitePlayer
 {
 public:
-    uint8_t view() const override { return 'W'; }
+//    uint8_t view() const override { return 'W'; }
     using WhitePlayer::color;
+    using WhitePlayer::view;
 };
 
 class BQueen : public Queen, public BlackPlayer
 {
 public:
-    uint8_t view() const override { return 'B'; }
+//    uint8_t view() const override { return 'B'; }
     using BlackPlayer::color;
+    using BlackPlayer::view;
 };
 
 template<typename T> class CellCreator

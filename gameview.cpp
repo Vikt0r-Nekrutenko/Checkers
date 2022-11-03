@@ -17,7 +17,7 @@ void GameView::show(stf::Renderer &renderer)
             if(c == GameBoard::emptyCell())
                 renderer.drawPixel({x*3+1, y+2}, '_');
             else
-                renderer.drawPixel({x*3+1, y+2}, c->view());
+                renderer.drawPixel({x*3+1, y+2}, c->view(), c->color());
         }
     }
 
@@ -30,7 +30,7 @@ void GameView::show(stf::Renderer &renderer)
     renderer.drawPixel({model->cursor.selectableCell.pos.x * 3 + 0, model->cursor.selectableCell.pos.y + 2}, '[');
     renderer.drawPixel({model->cursor.selectableCell.pos.x * 3 + 2, model->cursor.selectableCell.pos.y + 2}, ']');
 
-    model->player->color() == stf::ColorTable::Black
+    model->player->color() == stf::ColorTable::Red
             ? renderer.drawText({0,10}, "Black player turn")
             : renderer.drawText({0,10}, "White player turn");
 
@@ -40,5 +40,6 @@ void GameView::show(stf::Renderer &renderer)
         renderer.drawText({0,11}, "In white zone.");
 
     renderer.draw({0,12}, "Exception counter : %d", model->exCount);
-    if(model->cellUnAt) renderer.draw({0, 13}, "Cell under atttack exist!");
+    if(model->isSelect) renderer.draw({0, 14}, "SELECT");
+                   else renderer.draw({0, 14}, "PUT!!!");
 }

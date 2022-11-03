@@ -11,6 +11,7 @@ public:
     GameModel();
 
     BoardCell *opponent() const;
+    Cursor getCellUnderAttack();
     void placementAfterHandling();
     stf::smv::IView* put(stf::smv::IView *sender);
     stf::smv::IView* select(stf::smv::IView *sender);
@@ -21,7 +22,6 @@ public:
     BoardCell *player = GameBoard::blackPlayer();
 
     uint32_t exCount = 0ul;
-    bool cellUnAt = false;
     bool isSelect = true;
 };
 

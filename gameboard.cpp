@@ -4,6 +4,7 @@
 CellCreator<EmptyCell>   GameBoard::emptyCell   = CellCreator<EmptyCell>();
 CellCreator<WhitePlayer> GameBoard::whitePlayer = CellCreator<WhitePlayer>();
 CellCreator<BlackPlayer> GameBoard::blackPlayer = CellCreator<BlackPlayer>();
+CellCreator<Queen> GameBoard::queenPlayer = CellCreator<Queen>();
 
 CellCreator<WChecker>  GameBoard::whiteChecker  = CellCreator<WChecker>();
 CellCreator<BChecker>  GameBoard::blackChecker  = CellCreator<BChecker>();
@@ -19,6 +20,13 @@ GameBoard::GameBoard()
 }
 
 BoardCell *GameBoard::operator[](const stf::Vec2d &p) {
+    int i = Size.x * p.y + p.x;
+    if(p.x < 0 || p.y < 0 || p.x >= Size.x || p.y >= Size.y)
+        throw std::out_of_range(std::string("index = ") + std::to_string(i));
+    return board.at(i);
+}
+
+BoardCell *GameBoard::operator[](const stf::Vec2d &p) const {
     int i = Size.x * p.y + p.x;
     if(p.x < 0 || p.y < 0 || p.x >= Size.x || p.y >= Size.y)
         throw std::out_of_range(std::string("index = ") + std::to_string(i));

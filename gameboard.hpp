@@ -15,6 +15,7 @@ public:
     GameBoard();
 
     BoardCell* operator[](const stf::Vec2d& p);
+    BoardCell* operator[](const stf::Vec2d& p)const;
 
     bool place(const int i, BoardCell* cell);
     bool place(const stf::Vec2d& p, BoardCell* cell);
@@ -32,6 +33,7 @@ public:
     static CellCreator<EmptyCell>   emptyCell;
     static CellCreator<WhitePlayer> whitePlayer;
     static CellCreator<BlackPlayer> blackPlayer;
+    static CellCreator<Queen> queenPlayer;
 
     static CellCreator<WChecker>    whiteChecker;
     static CellCreator<BChecker>    blackChecker;

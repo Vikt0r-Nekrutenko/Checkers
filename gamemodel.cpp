@@ -2,42 +2,42 @@
 
 GameModel::GameModel() : stf::smv::BaseModel()
 {
-//    board.place(1, GameBoard::whiteChecker());
-//    board.place(3, GameBoard::whiteChecker());
-//    board.place(5, GameBoard::whiteChecker());
-//    board.place(7, GameBoard::whiteChecker());
+    board.place(1, GameBoard::whiteChecker());
+    board.place(3, GameBoard::whiteChecker());
+    board.place(5, GameBoard::whiteChecker());
+    board.place(7, GameBoard::whiteChecker());
 
-//    board.place(8, GameBoard::whiteChecker());
-//    board.place(10, GameBoard::whiteChecker());
-//    board.place(12, GameBoard::whiteChecker());
-//    board.place(14, GameBoard::whiteChecker());
+    board.place(8, GameBoard::whiteChecker());
+    board.place(10, GameBoard::whiteChecker());
+    board.place(12, GameBoard::whiteChecker());
+    board.place(14, GameBoard::whiteChecker());
 
-//    board.place(17, GameBoard::whiteChecker());
-//    board.place(19, GameBoard::whiteChecker());
-//    board.place(21, GameBoard::whiteChecker());
-//    board.place(23, GameBoard::whiteChecker());
+    board.place(17, GameBoard::whiteChecker());
+    board.place(19, GameBoard::whiteChecker());
+    board.place(21, GameBoard::whiteChecker());
+    board.place(23, GameBoard::whiteChecker());
 
-//    board.place(39+1, GameBoard::blackChecker());
-//    board.place(39+3, GameBoard::blackChecker());
-//    board.place(39+5, GameBoard::blackChecker());
-//    board.place(39+7, GameBoard::blackChecker());
+    board.place(39+1, GameBoard::blackChecker());
+    board.place(39+3, GameBoard::blackChecker());
+    board.place(39+5, GameBoard::blackChecker());
+    board.place(39+7, GameBoard::blackChecker());
 
-//    board.place(39+10, GameBoard::blackChecker());
-//    board.place(39+12, GameBoard::blackChecker());
-//    board.place(39+14, GameBoard::blackChecker());
-//    board.place(39+16, GameBoard::blackChecker());
+    board.place(39+10, GameBoard::blackChecker());
+    board.place(39+12, GameBoard::blackChecker());
+    board.place(39+14, GameBoard::blackChecker());
+    board.place(39+16, GameBoard::blackChecker());
 
-//    board.place(39+17, GameBoard::blackChecker());
-//    board.place(39+19, GameBoard::blackChecker());
-//    board.place(39+21, GameBoard::blackChecker());
-//    board.place(39+23, GameBoard::blackChecker());
+    board.place(39+17, GameBoard::blackChecker());
+    board.place(39+19, GameBoard::blackChecker());
+    board.place(39+21, GameBoard::blackChecker());
+    board.place(39+23, GameBoard::blackChecker());
 
 //    board.place({1,4}, GameBoard::blackChecker());
-    board.place({5,1}, GameBoard::whiteChecker());
-    board.place({4,4}, GameBoard::blackChecker());
+//    board.place({4,4}, GameBoard::blackQueen());
 
-    board.place({3,3}, GameBoard::whiteChecker());
-    board.place({5,3}, GameBoard::whiteChecker());
+//    board.place({5,1}, GameBoard::whiteChecker());
+//    board.place({3,3}, GameBoard::whiteChecker());
+//    board.place({5,3}, GameBoard::whiteChecker());
 }
 
 BoardCell *GameModel::opponent() const {
@@ -58,13 +58,16 @@ void GameModel::placementAfterHandling()
     cursor.reset();
 }
 
-Cursor getCellUnderAttack(GameModel *model, Cursor& cursor)
+Cursor GameModel::getCellUnderAttack()
 {
-    for(int y = 0; y < model->board.Size.y; ++y) {
-        for(int x = 0; x < model->board.Size.x; ++x) {
-            Cursor tmp = { {{x,y}, model->board[{x,y}]}, {{x,y}, model->board[{x,y}]} };
-            if(tmp == model->player && tmp.nextTurnCanBeAttack(model))
+    for(int y = 0; y < board.Size.y; ++y) {
+        for(int x = 0; x < board.Size.x; ++x) {
+            Cursor tmp = { {{x,y}, board[{x,y}]},
+                           {{x,y}, board[{x,y}]} };
+            if(tmp.selectableCell.cell->color() == player->color() && tmp.nextTurnWillBeAttack(this)) {
+                isSelect = false;
                 return tmp;
+            }
         }
     }
     return cursor;
@@ -75,8 +78,10 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
     if(cursor.selectableCell.cell->onPlacementHandler(this, cursor)) {
         placementAfterHandling();
 
-        cursor = getCellUnderAttack(this, cursor);
-        if(!cursor.nextTurnCanBeAttack(this)) {
+        cursor = getCellUnderAttack();
+        if(cursor.selectedCell.cell->view() == GameBoard::queenPlayer()->view() && cursor.nextTurnWillBeAttack(this)) {
+            return sender;
+        } else {
             isSelect = true;
             cursor.reset();
             player = opponent();
@@ -87,12 +92,11 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 
 stf::smv::IView *GameModel::select(stf::smv::IView *sender)
 {
+    cursor = getCellUnderAttack();
     BoardCell *cell = board.getSelectableCell(cursor);
-    cursor = getCellUnderAttack(this, cursor);
 
     if(cell->color() == player->color()) {
         cursor.select(cell);
-        cellUnAt = false;
         isSelect = false;
     }
 
@@ -108,7 +112,10 @@ stf::smv::IView *GameModel::keyEventsHandler(stf::smv::IView *sender, const int 
     case 's': if(cursor.selectableCell.pos.y < board.Size.y-1) cursor.selectableCell.pos += stf::Vec2d(0,1); break;
     case 'd': if(cursor.selectableCell.pos.x < board.Size.x-1) cursor.selectableCell.pos += stf::Vec2d(1,0); break;
     case 'q': return nullptr;
-    case 'x': isSelect = true; cursor.reset(); break;
+    case 'x':
+        isSelect = true;
+        cursor.reset();
+        break;
     case ' ':
         if(isSelect)
             return select(sender);
