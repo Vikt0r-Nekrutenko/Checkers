@@ -64,7 +64,8 @@ GameTurn *Checker::getNextTurn(GameModel *model, const Cursor &cursor)
          if(rAttackTurn != turns::nothingTurn()) return rAttackTurn;
     else if(lAttackTurn != turns::nothingTurn()) return lAttackTurn;
     else if(rMoveTurn != turns::nothingTurn()) return rMoveTurn;
-    else return lMoveTurn;
+    else if(lMoveTurn != turns::nothingTurn()) return rMoveTurn;
+         return turns::nothingTurn();
 }
 
 GameTurn *Checker::attackTurnHandler(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
@@ -73,6 +74,13 @@ GameTurn *Checker::attackTurnHandler(GameModel *model, const Cursor& cursor, con
         return turns::nothingTurn();
     if(!_attackIsPossible(model, cursor, moveDirection, attackDirection))
         return turns::mustBeAttackingTurn();
+
+    GameTurn *rfw = _reattackIsAvailiable(model, cursor, rMoveFw, rAttackFw);
+    GameTurn *lfw = _reattackIsAvailiable(model, cursor, lMoveFw, lAttackFw);
+
+         if(rfw == turns::multiplyTurn()) return rfw;
+    else if(lfw == turns::multiplyTurn()) return lfw;
+
     return turns::attackTurn();
 }
 
@@ -97,7 +105,7 @@ GameTurn *Queen::getNextTurn(GameModel *model, const Cursor &cursor)
     else if(lfwMoveTurn != turns::nothingTurn()) return lfwMoveTurn;
     else if(rbwMoveTurn != turns::nothingTurn()) return rbwMoveTurn;
     else if(lbwMoveTurn != turns::nothingTurn()) return lbwMoveTurn;
-    return turns::nothingTurn();
+         return turns::nothingTurn();
 }
 
 GameTurn *Queen::attackTurnHandler(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
