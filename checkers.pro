@@ -9,7 +9,8 @@ SOURCES += \
         gameboard.cpp \
         gamemodel.cpp \
         gameview.cpp \
-        main.cpp
+        main.cpp \
+        turns.cpp
 
 LIBS += -L$$PWD/../stf/release/ -lstf
 
@@ -25,4 +26,5 @@ HEADERS += \
     cursor.hpp \
     gameboard.hpp \
     gamemodel.hpp \
-    gameview.hpp
+    gameview.hpp \
+    turns.hpp

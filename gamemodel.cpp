@@ -75,24 +75,24 @@ Cursor GameModel::getCellUnderAttack()
 
 stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 {
-    if(cursor.selectableCell.cell->onPlacementHandler(this, cursor)) {
+    if(cursor.selectableCell.cell->onPlacementHandler(this, cursor) != turns::nothingTurn()) {
         placementAfterHandling();
 
-        cursor = getCellUnderAttack();
-        if(cursor.selectedCell.cell->view() == GameBoard::queenPlayer()->view() && cursor.nextTurnWillBeAttack(this)) {
-            return sender;
-        } else {
+//        cursor = getCellUnderAttack();
+//        if(cursor.selectedCell.cell->view() == GameBoard::queenPlayer()->view() && cursor.nextTurnWillBeAttack(this)) {
+//            return sender;
+//        } else {
             isSelect = true;
             cursor.reset();
             player = opponent();
-        }
+//        }
     }
     return sender;
 }
 
 stf::smv::IView *GameModel::select(stf::smv::IView *sender)
 {
-    cursor = getCellUnderAttack();
+//    cursor = getCellUnderAttack();
     BoardCell *cell = board.getSelectableCell(cursor);
 
     if(cell->color() == player->color()) {
