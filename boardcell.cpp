@@ -61,11 +61,16 @@ GameTurn *Checker::getNextTurn(GameModel *model, const Cursor &cursor)
     GameTurn *rMoveTurn = _moveTurnHandler(model, cursor, rMoveFw);
     GameTurn *lMoveTurn = _moveTurnHandler(model, cursor, lMoveFw);
 
-         if(rAttackTurn != turns::nothingTurn()) return rAttackTurn;
-    else if(lAttackTurn != turns::nothingTurn()) return lAttackTurn;
-    else if(rMoveTurn != turns::nothingTurn()) return rMoveTurn;
-    else if(lMoveTurn != turns::nothingTurn()) return rMoveTurn;
-         return turns::nothingTurn();
+    if(rAttackTurn == turns::multiplyTurn() || lAttackTurn == turns::multiplyTurn())
+        return turns::multiplyTurn();
+
+    else if(rAttackTurn == turns::attackTurn() || lAttackTurn == turns::attackTurn())
+        return turns::attackTurn();
+
+    else if(rMoveTurn == turns::moveTurn() || lMoveTurn == turns::moveTurn())
+        return turns::moveTurn();
+
+    return turns::nothingTurn();
 }
 
 GameTurn *Checker::attackTurnHandler(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
