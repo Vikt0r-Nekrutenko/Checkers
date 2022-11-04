@@ -58,8 +58,6 @@ GameTurn *Checker::getNextTurn(GameModel *model, const Cursor &cursor)
 {
     GameTurn *rAttackTurn = attackTurnHandler(model, cursor, rMoveFw, rAttackFw);
     GameTurn *lAttackTurn = attackTurnHandler(model, cursor, lMoveFw, lAttackFw);
-    GameTurn *rMoveTurn = _moveTurnHandler(model, cursor, rMoveFw);
-    GameTurn *lMoveTurn = _moveTurnHandler(model, cursor, lMoveFw);
 
     if(rAttackTurn == turns::multiplyTurn() || lAttackTurn == turns::multiplyTurn())
         return turns::multiplyTurn();
@@ -67,7 +65,13 @@ GameTurn *Checker::getNextTurn(GameModel *model, const Cursor &cursor)
     else if(rAttackTurn == turns::attackTurn() || lAttackTurn == turns::attackTurn())
         return turns::attackTurn();
 
-    else if(rMoveTurn == turns::moveTurn() || lMoveTurn == turns::moveTurn())
+    else if(rAttackTurn == turns::mustBeAttackingTurn() || lAttackTurn == turns::mustBeAttackingTurn())
+        return turns::mustBeAttackingTurn();
+
+    GameTurn *rMoveTurn = _moveTurnHandler(model, cursor, rMoveFw);
+    GameTurn *lMoveTurn = _moveTurnHandler(model, cursor, lMoveFw);
+
+    if(rMoveTurn == turns::moveTurn() || lMoveTurn == turns::moveTurn())
         return turns::moveTurn();
 
     return turns::nothingTurn();
@@ -83,8 +87,8 @@ GameTurn *Checker::attackTurnHandler(GameModel *model, const Cursor& cursor, con
     GameTurn *rfw = _reattackIsAvailiable(model, cursor, rMoveFw, rAttackFw);
     GameTurn *lfw = _reattackIsAvailiable(model, cursor, lMoveFw, lAttackFw);
 
-         if(rfw == turns::multiplyTurn()) return rfw;
-    else if(lfw == turns::multiplyTurn()) return lfw;
+     if(rfw == turns::multiplyTurn() || lfw == turns::multiplyTurn())
+         return turns::multiplyTurn();
 
     return turns::attackTurn();
 }
