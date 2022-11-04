@@ -6,12 +6,11 @@ void *GameTurn::operator new(size_t size)
     return BoardCell::_cellAllocator.allocate(size);
 }
 
-TurnsCreator<NothingTurn> turns::nothingTurn = TurnsCreator<NothingTurn>();
-TurnsCreator<AttackTurn> turns::attackTurn = TurnsCreator<AttackTurn>();
-TurnsCreator<SimpleAttackTurn> turns::simpleTurn = TurnsCreator<SimpleAttackTurn>();
-TurnsCreator<MultiplyAttackTurn> turns::multiAttatckTurn = TurnsCreator<MultiplyAttackTurn>();
-TurnsCreator<MustBeAttackingTurn> turns::mustBeAttackingTurn = TurnsCreator<MustBeAttackingTurn>();
-TurnsCreator<MoveTurn> turns::moveTurn = TurnsCreator<MoveTurn>();
+TurnsCreator<MoveTurn>              turns::moveTurn = TurnsCreator<MoveTurn>();
+TurnsCreator<AttackTurn>            turns::attackTurn = TurnsCreator<AttackTurn>();
+TurnsCreator<NothingTurn>           turns::nothingTurn = TurnsCreator<NothingTurn>();
+TurnsCreator<MultiplyAttackTurn>    turns::multiAttatckTurn = TurnsCreator<MultiplyAttackTurn>();
+TurnsCreator<MustBeAttackingTurn>   turns::mustBeAttackingTurn = TurnsCreator<MustBeAttackingTurn>();
 
 auto getTargetPos = [](const Selector& s1, const Selector& s2) -> stf::Vec2d {
     stf::Vec2d sub = s1.pos - s2.pos;

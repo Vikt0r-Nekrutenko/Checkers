@@ -8,21 +8,18 @@ class GameTurn
 public:
     void* operator new(size_t size);
 
-    virtual void turnHandler(GameModel *model) = 0;
+    virtual void turnHandler(GameModel *) { }
 };
-class NothingTurn : public GameTurn
-{
-    void turnHandler(GameModel *) override {  }
-};
+
+class MustBeAttackingTurn : public GameTurn {};
+
+class NothingTurn : public GameTurn {};
+
 class AttackTurn : public GameTurn
 {
     void turnHandler(GameModel *model) override;
 };
-class MustBeAttackingTurn : public GameTurn
-{
-    void turnHandler(GameModel *) override { }
-};
-class SimpleAttackTurn : public GameTurn { };
+
 class MultiplyAttackTurn : public GameTurn
 {
     void turnHandler(GameModel *model) override;
@@ -45,12 +42,11 @@ public:
 class turns
 {
 public:
-    static TurnsCreator<NothingTurn> nothingTurn;
-    static TurnsCreator<AttackTurn> attackTurn;
-    static TurnsCreator<SimpleAttackTurn> simpleTurn;
+    static TurnsCreator<MoveTurn>           moveTurn;
+    static TurnsCreator<NothingTurn>        nothingTurn;
+    static TurnsCreator<AttackTurn>         attackTurn;
     static TurnsCreator<MultiplyAttackTurn> multiAttatckTurn;
-    static TurnsCreator<MustBeAttackingTurn> mustBeAttackingTurn;
-    static TurnsCreator<MoveTurn> moveTurn;
+    static TurnsCreator<MustBeAttackingTurn>mustBeAttackingTurn;
 };
 
 #endif // TURNS_HPP
