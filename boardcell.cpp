@@ -26,7 +26,7 @@ auto _reattackIsAvailiable = [](GameModel *model, const Cursor& cursor, const st
 
         if(model->board[cursor.selectableCell.pos + moveDirection]->color() == model->opponent()->color() &&
                 cellBehindOpponent == GameBoard::emptyCell())
-            return turns::multiplyTurn();
+            return turns::multiAttatckTurn();
     } catch(const std::out_of_range& ex) {
         return turns::nothingTurn();
     }
@@ -54,46 +54,42 @@ auto _moveTurnHandler = [](GameModel *model, const Cursor& cursor, const stf::Ve
     return turns::nothingTurn();
 };
 
-GameTurn *Checker::getNextTurn(GameModel *model, const Cursor &cursor)
+GameTurn *Checker::takeNextTurn(GameModel *model, const Cursor &cursor)
 {
     GameTurn *rAttackTurn = attackTurnHandler(model, cursor, rMoveFw, rAttackFw);
     GameTurn *lAttackTurn = attackTurnHandler(model, cursor, lMoveFw, lAttackFw);
 
-    if(rAttackTurn == turns::multiplyTurn() || lAttackTurn == turns::multiplyTurn())
-        return turns::multiplyTurn();
+    rAttackTurn->turnHandler(model);
+    lAttackTurn->turnHandler(model);
 
-    else if(rAttackTurn == turns::attackTurn() || lAttackTurn == turns::attackTurn())
-        return turns::attackTurn();
+    if(rAttackTurn == turns::nothingTurn() && lAttackTurn == turns::nothingTurn()) {
+        GameTurn *rMoveTurn = _moveTurnHandler(model, cursor, rMoveFw);
+        GameTurn *lMoveTurn = _moveTurnHandler(model, cursor, lMoveFw);
 
-    else if(rAttackTurn == turns::mustBeAttackingTurn() || lAttackTurn == turns::mustBeAttackingTurn())
-        return turns::mustBeAttackingTurn();
-
-    GameTurn *rMoveTurn = _moveTurnHandler(model, cursor, rMoveFw);
-    GameTurn *lMoveTurn = _moveTurnHandler(model, cursor, lMoveFw);
-
-    if(rMoveTurn == turns::moveTurn() || lMoveTurn == turns::moveTurn())
-        return turns::moveTurn();
-
+        rMoveTurn->turnHandler(model);
+        lMoveTurn->turnHandler(model);
+    }
     return turns::nothingTurn();
 }
 
-GameTurn *Checker::attackTurnHandler(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
+GameTurn *Checker::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
 {
     if(_attackIsAvailiable(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
         return turns::nothingTurn();
+
     if(!_attackIsPossible(model, cursor, moveDirection, attackDirection))
         return turns::mustBeAttackingTurn();
 
     GameTurn *rfw = _reattackIsAvailiable(model, cursor, rMoveFw, rAttackFw);
     GameTurn *lfw = _reattackIsAvailiable(model, cursor, lMoveFw, lAttackFw);
 
-     if(rfw == turns::multiplyTurn() || lfw == turns::multiplyTurn())
-         return turns::multiplyTurn();
+     if(rfw == turns::multiAttatckTurn() || lfw == turns::multiAttatckTurn())
+         return turns::multiAttatckTurn();
 
     return turns::attackTurn();
 }
 
-GameTurn *Queen::getNextTurn(GameModel *model, const Cursor &cursor)
+GameTurn *Queen::takeNextTurn(GameModel *model, const Cursor &cursor)
 {
     GameTurn *rfwAttackTurn = attackTurnHandler(model, cursor, rMoveFw, rAttackFw);
     GameTurn *lfwAttackTurn = attackTurnHandler(model, cursor, lMoveFw, lAttackFw);
@@ -117,7 +113,7 @@ GameTurn *Queen::getNextTurn(GameModel *model, const Cursor &cursor)
          return turns::nothingTurn();
 }
 
-GameTurn *Queen::attackTurnHandler(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
+GameTurn *Queen::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
 {
     if(_attackIsAvailiable(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
         return turns::nothingTurn();
@@ -130,10 +126,10 @@ GameTurn *Queen::attackTurnHandler(GameModel *model, const Cursor& cursor, const
     GameTurn *rbw = _reattackIsAvailiable(model, cursor, rMoveBw, rAttackBw);
     GameTurn *lbw = _reattackIsAvailiable(model, cursor, lMoveBw, lAttackBw);
 
-         if(rfw == turns::multiplyTurn()) return rfw;
-    else if(rbw == turns::multiplyTurn()) return rbw;
-    else if(lfw == turns::multiplyTurn()) return lfw;
-    else if(lbw == turns::multiplyTurn()) return lbw;
+         if(rfw == turns::multiAttatckTurn()) return rfw;
+    else if(rbw == turns::multiAttatckTurn()) return rbw;
+    else if(lfw == turns::multiAttatckTurn()) return lfw;
+    else if(lbw == turns::multiAttatckTurn()) return lbw;
 
     return turns::attackTurn();
 }

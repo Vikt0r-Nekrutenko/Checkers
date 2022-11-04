@@ -64,9 +64,7 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
     if(cell->color() == player->color())
         cursor.select(cell);
     else {
-        cell = board.getSelectedCell(cursor);
-        GameTurn *placementResult = cell->getNextTurn(this, cursor);
-        placementResult->turnHandler(this);
+        board.getSelectedCell(cursor)->takeNextTurn(this, cursor);
     }
 
     return sender;

@@ -48,7 +48,7 @@ public:
     static TurnsCreator<NothingTurn> nothingTurn;
     static TurnsCreator<AttackTurn> attackTurn;
     static TurnsCreator<SimpleAttackTurn> simpleTurn;
-    static TurnsCreator<MultiplyAttackTurn> multiplyTurn;
+    static TurnsCreator<MultiplyAttackTurn> multiAttatckTurn;
     static TurnsCreator<MustBeAttackingTurn> mustBeAttackingTurn;
     static TurnsCreator<MoveTurn> moveTurn;
 };
