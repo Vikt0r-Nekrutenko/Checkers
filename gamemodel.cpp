@@ -32,7 +32,7 @@ GameModel::GameModel() : stf::smv::BaseModel()
 //    board.place(39+21, GameBoard::blackChecker());
 //    board.place(39+23, GameBoard::blackChecker());
 
-    board.place({4,4}, GameBoard::blackChecker());
+    board.place({4,4}, GameBoard::blackQueen());
     board.place({2,4}, GameBoard::blackChecker());
 
     board.place({3,1}, GameBoard::whiteChecker());
