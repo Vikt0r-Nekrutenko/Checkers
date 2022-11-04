@@ -13,37 +13,37 @@ TurnsCreator<MultiplyAttackTurn> turns::multiAttatckTurn = TurnsCreator<Multiply
 TurnsCreator<MustBeAttackingTurn> turns::mustBeAttackingTurn = TurnsCreator<MustBeAttackingTurn>();
 TurnsCreator<MoveTurn> turns::moveTurn = TurnsCreator<MoveTurn>();
 
-void AttackTurn::turnHandler(GameModel *model)
-{
-    model->board.clear(model->cursor.selectedCell.pos);
-    stf::Vec2d sub = model->cursor.selectableCell.pos - model->cursor.selectedCell.pos;
-    stf::Vec2d norm = { sub.x / std::abs(sub.x), sub.y / std::abs(sub.y) };
-    model->board.clear(model->cursor.selectedCell.pos + norm);
+auto getTargetPos = [](const Selector& s1, const Selector& s2) -> stf::Vec2d {
+    stf::Vec2d sub = s1.pos - s2.pos;
+    stf::Vec2d pos = { sub.x / std::abs(sub.x),
+                       sub.y / std::abs(sub.y) };
+    return pos;
+};
+
+auto clearTargets = [](GameModel *model, const stf::Vec2d& t1, const stf::Vec2d& t2) {
+    model->board.clear(t1);
+    model->board.clear(t2);
 
     model->placementAfterHandling();
+};
+
+void AttackTurn::turnHandler(GameModel *model)
+{
+    clearTargets(model, model->cursor.selectedCell.pos, model->cursor.selectedCell.pos + getTargetPos(model->cursor.selectableCell, model->cursor.selectedCell));
+
     model->cursor.reset();
     model->player = model->opponent();
-    model->isSelect = true;
 }
 
 void MultiplyAttackTurn::turnHandler(GameModel *model)
 {
-    model->board.clear(model->cursor.selectedCell.pos);
-    stf::Vec2d sub = model->cursor.selectableCell.pos - model->cursor.selectedCell.pos;
-    stf::Vec2d norm = { sub.x / std::abs(sub.x), sub.y / std::abs(sub.y) };
-    model->board.clear(model->cursor.selectedCell.pos + norm);
-
-    model->placementAfterHandling();
+    clearTargets(model, model->cursor.selectedCell.pos, model->cursor.selectedCell.pos + getTargetPos(model->cursor.selectableCell, model->cursor.selectedCell));
     model->cursor.select(model->board.getSelectableCell(model->cursor));
 }
 
 void MoveTurn::turnHandler(GameModel *model)
 {
-    model->board.clear(model->cursor.selectedCell.pos);
-    model->board.place(model->cursor.selectableCell.pos, model->cursor.selectableCell.cell);
-
-    model->placementAfterHandling();
+    clearTargets(model, model->cursor.selectedCell.pos, model->cursor.selectedCell.pos);
     model->cursor.reset();
     model->player = model->opponent();
-    model->isSelect = true;
 }
