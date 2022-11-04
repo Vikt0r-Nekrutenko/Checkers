@@ -15,13 +15,6 @@ struct Cursor
     Selector selectableCell;
     Selector selectedCell;
 
-    bool cursorIsEmpty() const;
-
-    bool selectedIsEmpty() const;
-    bool selectableIsEmpty() const;
-
-    bool nextTurnWillBeAttack(GameModel *model) const;
-
     void reset();
     void select(BoardCell *cell);
 };
