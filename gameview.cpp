@@ -34,11 +34,6 @@ void GameView::show(stf::Renderer &renderer)
             ? renderer.drawText({0,10}, "Black player turn")
             : renderer.drawText({0,10}, "White player turn");
 
-    if(model->board.objectIsInBlackZone(model->cursor.selectableCell.pos))
-        renderer.drawText({0,11}, "In black zone.");
-    else if(model->board.objectIsInWhiteZone(model->cursor.selectableCell.pos))
-        renderer.drawText({0,11}, "In white zone.");
-
     renderer.draw({0,12}, "Exception counter : %d", model->exCount);
     if(model->isSelect) renderer.draw({0, 14}, "SELECT");
                    else renderer.draw({0, 14}, "PUT!!!");

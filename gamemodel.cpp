@@ -47,16 +47,6 @@ BoardCell *GameModel::opponent() const {
         return GameBoard::blackPlayer();
 }
 
-void GameModel::placementAfterHandling()
-{
-    if(board.objectIsInBlackZone(cursor.selectableCell.pos) && cursor.selectableCell.cell == GameBoard::whiteChecker())
-        board.place(cursor.selectableCell.pos, GameBoard::whiteQueen());
-    else if(board.objectIsInWhiteZone(cursor.selectableCell.pos) && cursor.selectableCell.cell == GameBoard::blackChecker())
-        board.place(cursor.selectableCell.pos, GameBoard::blackQueen());
-    else
-        board.place(cursor.selectableCell.pos, cursor.selectableCell.cell);
-}
-
 stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 {
     BoardCell *cell = board.getSelectableCell(cursor);

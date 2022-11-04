@@ -12,7 +12,6 @@ public:
 
     BoardCell *opponent() const;
     Cursor getCellUnderAttack();
-    void placementAfterHandling();
     stf::smv::IView* put(stf::smv::IView *sender);
     stf::smv::IView* select(stf::smv::IView *sender);
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) final;

@@ -21,8 +21,8 @@ public:
     bool place(const stf::Vec2d& p, BoardCell* cell);
     bool clear(const stf::Vec2d& p);
 
-    bool objectIsInBlackZone(const stf::Vec2d& pos) const;
-    bool objectIsInWhiteZone(const stf::Vec2d& pos) const;
+    void wCheckerIsInBlackZoneTransform(const stf::Vec2d& pos);
+    void bCheckerIsInWhiteZoneTransform(const stf::Vec2d& pos);
 
     BoardCell* getSelectedCell(const Cursor& cursor);
     BoardCell* getSelectableCell(const Cursor& cursor);
@@ -33,7 +33,6 @@ public:
     static CellCreator<EmptyCell>   emptyCell;
     static CellCreator<WhitePlayer> whitePlayer;
     static CellCreator<BlackPlayer> blackPlayer;
-    static CellCreator<Queen> queenPlayer;
 
     static CellCreator<WChecker>    whiteChecker;
     static CellCreator<BChecker>    blackChecker;

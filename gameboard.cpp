@@ -4,7 +4,6 @@
 CellCreator<EmptyCell>   GameBoard::emptyCell   = CellCreator<EmptyCell>();
 CellCreator<WhitePlayer> GameBoard::whitePlayer = CellCreator<WhitePlayer>();
 CellCreator<BlackPlayer> GameBoard::blackPlayer = CellCreator<BlackPlayer>();
-CellCreator<Queen> GameBoard::queenPlayer = CellCreator<Queen>();
 
 CellCreator<WChecker>  GameBoard::whiteChecker  = CellCreator<WChecker>();
 CellCreator<BChecker>  GameBoard::blackChecker  = CellCreator<BChecker>();
@@ -53,14 +52,18 @@ bool GameBoard::clear(const stf::Vec2d &p) {
     return place(p, emptyCell());
 }
 
-bool GameBoard::objectIsInBlackZone(const stf::Vec2d &pos) const {
+void GameBoard::wCheckerIsInBlackZoneTransform(const stf::Vec2d &pos) {
     int indx = Size.x * pos.y + pos.x;
-    return indx >= Size.x * Size.y - Size.x && indx < Size.x * Size.y;
+    if(indx >= Size.x * Size.y - Size.x && indx < Size.x * Size.y && board.at(indx) == whiteChecker()) {
+        board.at(indx) = whiteQueen();
+    }
 }
 
-bool GameBoard::objectIsInWhiteZone(const stf::Vec2d &pos) const {
+void GameBoard::bCheckerIsInWhiteZoneTransform(const stf::Vec2d &pos) {
     int indx = Size.x * pos.y + pos.x;
-    return indx >= 0 && indx < Size.x;
+    if(indx >= 0 && indx < Size.x && board.at(indx) == blackChecker()) {
+        board.at(indx) = blackQueen();
+    }
 }
 
 BoardCell *GameBoard::getSelectedCell(const Cursor &cursor)

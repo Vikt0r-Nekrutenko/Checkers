@@ -132,11 +132,11 @@ GameTurn *Queen::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, con
     GameTurn *rbw = isMultiAttackTurn(model, cursor, rMoveBw, rAttackBw);
     GameTurn *lbw = isMultiAttackTurn(model, cursor, lMoveBw, lAttackBw);
 
-         if(rfw == turns::multiAttatckTurn() ||
-            rbw == turns::multiAttatckTurn() ||
-            lfw == turns::multiAttatckTurn() ||
-            lbw == turns::multiAttatckTurn())
-             return turns::multiAttatckTurn();
+     if(rfw == turns::multiAttatckTurn() ||
+        rbw == turns::multiAttatckTurn() ||
+        lfw == turns::multiAttatckTurn() ||
+        lbw == turns::multiAttatckTurn())
+         return turns::multiAttatckTurn();
 
     return turns::attackTurn();
 }
