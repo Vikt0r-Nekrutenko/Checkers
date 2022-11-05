@@ -139,12 +139,26 @@ GameTurn *Queen::takeNextTurn(GameModel *model, const Cursor &cursor)
     if(rfwAttackTurn == turns::nothingTurn() && lfwAttackTurn == turns::nothingTurn() &&
        rbwAttackTurn == turns::nothingTurn() && lbwAttackTurn == turns::nothingTurn())
     {
-        rfwMoveTurn->turnHandler(model, rMoveFw);
-        lfwMoveTurn->turnHandler(model, lMoveFw);
-        rbwMoveTurn->turnHandler(model, rMoveBw);
-        lbwMoveTurn->turnHandler(model, lMoveBw);
+        rfwMoveTurn->turnHandler(model, cursor.selectedCell.pos);
+        lfwMoveTurn->turnHandler(model, cursor.selectedCell.pos);
+        rbwMoveTurn->turnHandler(model, cursor.selectedCell.pos);
+        lbwMoveTurn->turnHandler(model, cursor.selectedCell.pos);
     }
 
+    return turns::nothingTurn();
+}
+
+GameTurn *Queen::isAttackTurnAvailiable(GameModel *model, const stf::Vec2d &pos) const
+{
+    GameTurn *rAttackTurn = BoardCell::isAttackTurnAvailiable(model, pos, rMoveFw, rAttackFw);
+    GameTurn *lAttackTurn = BoardCell::isAttackTurnAvailiable(model, pos, lMoveFw, lAttackFw);
+
+    GameTurn *rbwAttackTurn = BoardCell::isAttackTurnAvailiable(model, pos, rMoveBw, rAttackBw);
+    GameTurn *lbwAttackTurn = BoardCell::isAttackTurnAvailiable(model, pos, lMoveBw, lAttackBw);
+
+    if(rAttackTurn != turns::nothingTurn() || lAttackTurn != turns::nothingTurn() ||
+        rbwAttackTurn != turns::nothingTurn() || lbwAttackTurn != turns::nothingTurn())
+        return turns::attackTurn();
     return turns::nothingTurn();
 }
 

@@ -33,12 +33,12 @@ GameModel::GameModel() : stf::smv::BaseModel()
 //    board.place(39+21, GameBoard::blackChecker());
 //    board.place(39+23, GameBoard::blackChecker());
 
-    board.place({2,6}, GameBoard::blackChecker());
-    board.place({2,4}, GameBoard::blackChecker());
+    board.place({2,1}, GameBoard::blackChecker());
+    board.place({2,2}, GameBoard::blackChecker());
 
     board.place({3,1}, GameBoard::whiteChecker());
     board.place({1,3}, GameBoard::whiteChecker());
-//    board.place({3,3}, GameBoard::whiteChecker());
+    board.place({3,3}, GameBoard::whiteChecker());
 }
 
 BoardCell *GameModel::opponent() const {
