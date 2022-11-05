@@ -77,7 +77,7 @@ GameTurn *Checker::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, c
     if(isAttackTurnAvailiable(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
         return turns::nothingTurn();
 
-    if(!isAttackTurnPossible(model, cursor, moveDirection, attackDirection))
+    if(isAttackTurnPossible(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
         return turns::mustBeAttackingTurn();
 
     GameTurn *rfw = isMultiAttackTurn(model, cursor, rMoveFw, rAttackFw);
@@ -124,7 +124,7 @@ GameTurn *Queen::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, con
     if(isAttackTurnAvailiable(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
         return turns::nothingTurn();
 
-    if(!isAttackTurnPossible(model, cursor, moveDirection, attackDirection))
+    if(isAttackTurnPossible(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
         return turns::mustBeAttackingTurn();
 
     GameTurn *rfw = isMultiAttackTurn(model, cursor, rMoveFw, rAttackFw);
