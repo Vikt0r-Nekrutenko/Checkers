@@ -30,7 +30,6 @@ GameTurn *Checker::isAttackTurnAvailiable(GameModel *model, const stf::Vec2d &po
         GameTurn *attackTurn = BoardCell::isAttackTurnAvailiable(model, pos, i.move, i.attack);
         if(attackTurn != turns::nothingTurn())
             return turns::attackTurn();
-        return turns::nothingTurn();
     }
     return turns::nothingTurn();
 }
@@ -43,12 +42,11 @@ GameTurn *Checker::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, c
     if(isAttackTurnPossible(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
         return turns::mustBeAttackingTurn();
 
-    GameTurn *rfw = isMultiAttackTurn(model, cursor, rMoveFw, rAttackFw);
-    GameTurn *lfw = isMultiAttackTurn(model, cursor, lMoveFw, lAttackFw);
-
-     if(rfw == turns::multiAttatckTurn() || lfw == turns::multiAttatckTurn())
-         return turns::multiAttatckTurn();
-
+    for(auto i : directions) {
+        GameTurn *turn = isMultiAttackTurn(model, cursor, i.move, i.attack);
+        if(turn == turns::multiAttatckTurn())
+            return turns::multiAttatckTurn();
+    }
     return turns::attackTurn();
 }
 
