@@ -17,6 +17,7 @@ public:
     GameBoard board = GameBoard();
     Cursor cursor = Cursor();
     BoardCell *player = GameBoard::blackPlayer();
+    GameTurn *lastTurn = turns::nothingTurn();
 };
 
 #endif // GAMEMODEL_HPP

@@ -26,7 +26,7 @@ public:
     virtual BoardCell* getTransformPiece();;
     BoardCell* transformation(GameModel *model);
 
-    void takeNextTurn(GameModel *, const Cursor&);
+    GameTurn *takeNextTurn(GameModel *, const Cursor&);
     GameTurn *isNextTurnAreAttack(GameModel *, const Cursor&, const stf::Vec2d&, const stf::Vec2d&) const;
     GameTurn *isAttackTurnAvailiable(GameModel *, const stf::Vec2d&) const;
 

@@ -33,4 +33,5 @@ void GameView::show(stf::Renderer &renderer)
     model->player->color() == stf::ColorTable::Red
             ? renderer.drawText({0,10}, "Black player turn")
             : renderer.drawText({0,10}, "White player turn");
+    renderer.drawText({0, 11}, model->lastTurn->log().c_str());
 }

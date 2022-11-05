@@ -40,19 +40,21 @@ BoardCell *BoardCell::transformation(GameModel *model)
             : this;
 }
 
-void BoardCell::takeNextTurn(GameModel *model, const Cursor &cursor)
+GameTurn * BoardCell::takeNextTurn(GameModel *model, const Cursor &cursor)
 {
     for(auto i : directions) {
         GameTurn *attackTurn = isNextTurnAreAttack(model, cursor, i.move, i.attack);
         attackTurn->turnHandler(model, i.move);
         if(attackTurn != turns::nothingTurn())
-            return;
+            return attackTurn;
     }
 
+    GameTurn *moveTurn = turns::nothingTurn();
     for(auto i : directions) {
-        GameTurn *moveTurn = moveIsPossible(model, cursor, i.move);
+        moveTurn = moveIsPossible(model, cursor, i.move);
         moveTurn->turnHandler(model, cursor.selectedCell.pos);
     }
+    return moveTurn;
 }
 
 GameTurn * BoardCell::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const

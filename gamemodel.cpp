@@ -26,27 +26,30 @@ BoardCell *GameModel::opponent() const {
         return GameBoard::blackPlayer();
 }
 
-auto areSelectedCellValid = [](const std::vector<stf::Vec2d>& possibleAttacks, const Cursor& cursor) {
+auto areSelectedCellValid = [](const std::vector<stf::Vec2d>& possibleAttacks, const Cursor& cursor) -> GameTurn * {
     if(possibleAttacks.empty())
-        return true;
+        return turns::nothingTurn();
 
     for(auto i : possibleAttacks) {
         if(i == cursor.selectedCell.pos) {
-            return true;
+            return turns::nothingTurn();
         }
     }
-    return false;
+    return turns::mustBeAttackingTurn();
 };
 
 stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 {
     BoardCell *cell = board.getSelectableCell(cursor);
     auto possibleAttacks = board.findPossibleAttacks(this);
+    lastTurn = areSelectedCellValid(possibleAttacks, cursor);
 
     if(cell->color() == player->color()) {
         cursor.select(cell);
-    } else if(areSelectedCellValid(possibleAttacks, cursor)) {
-        board.getSelectedCell(cursor)->takeNextTurn(this, cursor);
+    } else if(lastTurn == turns::nothingTurn()) {
+        lastTurn = board.getSelectedCell(cursor)->takeNextTurn(this, cursor);
+    } else {
+        cursor.reset();
     }
 
     return sender;
