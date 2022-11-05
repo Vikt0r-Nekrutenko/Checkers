@@ -1,6 +1,14 @@
 #include "gamemodel.hpp"
 #include <algorithm>
 
+GameModel::~GameModel()
+{
+    try {
+        while(true)
+            saves.pop<GameSaveModel>();
+    } catch(const std::string& ex) { }
+}
+
 BoardCell *GameModel::opponent() const {
     if (player == GameBoard::blackPlayer())
         return GameBoard::whitePlayer();
@@ -69,6 +77,15 @@ stf::smv::IView *GameModel::keyEventsHandler(stf::smv::IView *sender, const int 
             cursor.selectableCell.pos.x = 0;
         break;
 
+    case 'z':
+        cursor.reset();
+        saves.load();
+        break;
+
+    case 'x':
+        saves.save();
+        break;
+
     case 'q':
         return nullptr;
 
@@ -84,4 +101,31 @@ void GameModel::reset()
     board = GameBoard();
     player = GameBoard::blackPlayer();
     lastTurn = turns::nothingTurn();
+}
+
+GameSaveModel::GameSaveModel(GameModel *model)
+    : stf::sdb::StackModel("checkers_saves.sdb"), mModel(model)
+{}
+
+void GameSaveModel::save()
+{
+    for(size_t i = 0; i < mModel->board.board.size(); ++i) {
+        board[i] = mModel->board.board.at(i)->uniqueNumericView();
+    }
+    player = mModel->player->uniqueNumericView();
+
+    push<GameSaveModel>();
+}
+
+void GameSaveModel::load()
+{
+    pop<GameSaveModel>();
+
+    for(size_t i = 0; i < mModel->board.board.size(); ++i) {
+        int uniqueIndx = board[i];
+        mModel->board.place(i, GameBoard::restoreFromIntView(uniqueIndx));
+    }
+    mModel->player = GameBoard().restoreFromIntView(player());
+
+    push<GameSaveModel>();
 }

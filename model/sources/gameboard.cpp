@@ -123,3 +123,17 @@ BoardCell *GameBoard::getSelectableCell(const Cursor &cursor)
 {
     return (*this)[cursor.selectableCell.pos];
 }
+
+BoardCell *GameBoard::restoreFromIntView(const int view)
+{
+    switch (view) {
+    case -3: return blackQueen();
+    case -2: return blackPlayer();
+    case -1: return blackChecker();
+    case 0:  return emptyCell();
+    case +1: return whiteChecker();
+    case +2: return whitePlayer();
+    case +3: return whiteQueen();
+    }
+    return emptyCell();
+}

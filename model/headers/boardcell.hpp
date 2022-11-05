@@ -19,6 +19,7 @@ class BoardCell
 {
 public:
     void* operator new(size_t size);
+    virtual int uniqueNumericView() const;
     virtual uint8_t view() const;
     virtual stf::ColorTable color() const;
 
@@ -48,6 +49,10 @@ public:
     inline uint8_t view() const override
     {
         return 'e';
+    }
+    inline int uniqueNumericView() const override
+    {
+        return 0;
     }
 };
 

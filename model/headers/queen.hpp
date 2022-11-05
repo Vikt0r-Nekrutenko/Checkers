@@ -17,8 +17,20 @@ public:
     }
 };
 
-class WQueen : public Queen, public WhitePlayer {};
+class WQueen : public Queen, public WhitePlayer
+{
+    inline int uniqueNumericView() const override
+    {
+        return +3;
+    }
+};
 
-class BQueen : public Queen, public BlackPlayer {};
+class BQueen : public Queen, public BlackPlayer
+{
+    inline int uniqueNumericView() const override
+    {
+        return -3;
+    }
+};
 
 #endif // QUEEN_HPP

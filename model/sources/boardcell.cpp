@@ -13,6 +13,11 @@ void *BoardCell::operator new(size_t size)
     return _cellAllocator.allocate(size);
 }
 
+int BoardCell::uniqueNumericView() const
+{
+    return 0;
+}
+
 uint8_t BoardCell::view() const
 {
     return 0;

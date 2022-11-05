@@ -15,6 +15,11 @@ public:
     WChecker();
     bool isTransformPossible(GameModel *model) override;
     BoardCell* getTransformPiece() override;
+
+    inline int uniqueNumericView() const override
+    {
+        return 1;
+    }
 };
 
 class BChecker : public Checker, public BlackPlayer
@@ -23,6 +28,11 @@ public:
     BChecker();
     virtual bool isTransformPossible(GameModel *model) override;
     BoardCell* getTransformPiece() override;
+
+    inline int uniqueNumericView() const override
+    {
+        return -1;
+    }
 };
 
 #endif // CHECKER_HPP

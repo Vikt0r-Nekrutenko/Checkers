@@ -1,6 +1,8 @@
 #ifndef CELLCREATOR_HPP
 #define CELLCREATOR_HPP
 
+class BoardCell;
+
 template<typename T> class CellCreator
 {
 public:

@@ -8,6 +8,9 @@
 #include "queen.hpp"
 #include "cellcreator.hpp"
 
+#define BOARD_W 8
+#define BOARD_H 8
+
 struct Cursor;
 
 class GameBoard
@@ -30,8 +33,9 @@ public:
 
     BoardCell* getSelectedCell(const Cursor& cursor);
     BoardCell* getSelectableCell(const Cursor& cursor);
+    static BoardCell *restoreFromIntView(const int view);
 
-    stf::Vec2d Size { 8, 8 };
+    stf::Vec2d Size { BOARD_W, BOARD_H };
     std::vector<BoardCell*> board;
 
     static CellCreator<EmptyCell>   emptyCell;
