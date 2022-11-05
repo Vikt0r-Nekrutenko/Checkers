@@ -9,6 +9,12 @@
 class GameModel;
 struct Cursor;
 
+struct Direction
+{
+    stf::Vec2d move   {0,0};
+    stf::Vec2d attack {0,0};
+};
+
 class BoardCell
 {
 public:
@@ -31,6 +37,7 @@ public:
     GameTurn* isAttackTurnPossible(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const;
     GameTurn* moveIsPossible(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection) const;
 
+    std::vector<Direction> directions;
     static stf::sdb::DynamicFieldsAllocator _cellAllocator;
 };
 

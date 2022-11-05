@@ -22,6 +22,9 @@ public:
     {
         rMoveFw   = {+1,+1}, lMoveFw   = {-1,+1};
         rAttackFw = {+2,+2}, lAttackFw = {-2,+2};
+
+        directions.push_back({{+1,+1},{+2,+2}}); // right move dir & right attack dir
+        directions.push_back({{-1,+1},{-2,+2}}); // left move dir && right attack dir
     }
     bool isTransformPossible(GameModel *model) override;
     BoardCell* getTransformPiece() override;
@@ -34,6 +37,9 @@ public:
     {
         rMoveFw   = {+1,-1}, lMoveFw   = {-1,-1};
         rAttackFw = {+2,-2}, lAttackFw = {-2,-2};
+
+        directions.push_back({{+1,-1},{+2,-2}}); // right move dir & right attack dir
+        directions.push_back({{-1,-1},{-2,-2}}); // left move dir && right attack dir
     }
     virtual bool isTransformPossible(GameModel *model) override;
     BoardCell* getTransformPiece() override;

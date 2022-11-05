@@ -3,19 +3,34 @@
 
 GameTurn *Checker::takeNextTurn(GameModel *model, const Cursor &cursor)
 {
-    GameTurn *rAttackTurn = isNextTurnAreAttack(model, cursor, rMoveFw, rAttackFw);
-    GameTurn *lAttackTurn = isNextTurnAreAttack(model, cursor, lMoveFw, lAttackFw);
+//    GameTurn *rAttackTurn = isNextTurnAreAttack(model, cursor, rMoveFw, rAttackFw);
+//    GameTurn *lAttackTurn = isNextTurnAreAttack(model, cursor, lMoveFw, lAttackFw);
 
-    rAttackTurn->turnHandler(model, rMoveFw);
-    lAttackTurn->turnHandler(model, lMoveFw);
+//    rAttackTurn->turnHandler(model, rMoveFw);
+//    lAttackTurn->turnHandler(model, lMoveFw);
 
-    if(rAttackTurn == turns::nothingTurn() && lAttackTurn == turns::nothingTurn()) {
-        GameTurn *rMoveTurn = moveIsPossible(model, cursor, rMoveFw);
-        GameTurn *lMoveTurn = moveIsPossible(model, cursor, lMoveFw);
+//    if(rAttackTurn == turns::nothingTurn() && lAttackTurn == turns::nothingTurn()) {
+//        GameTurn *rMoveTurn = moveIsPossible(model, cursor, rMoveFw);
+//        GameTurn *lMoveTurn = moveIsPossible(model, cursor, lMoveFw);
 
-        rMoveTurn->turnHandler(model, cursor.selectedCell.pos);
-        lMoveTurn->turnHandler(model, cursor.selectedCell.pos);
+//        rMoveTurn->turnHandler(model, cursor.selectedCell.pos);
+//        lMoveTurn->turnHandler(model, cursor.selectedCell.pos);
+//    }
+    bool isAttack = true;
+    for(auto i : directions) {
+        GameTurn *attackTurn = isNextTurnAreAttack(model, cursor, i.move, i.attack);
+        attackTurn->turnHandler(model, i.move);
+        isAttack &= (attackTurn == turns::nothingTurn());
     }
+
+    if(isAttack == false)
+        return turns::nothingTurn();
+
+    for(auto i : directions) {
+        GameTurn *moveTurn = moveIsPossible(model, cursor, i.move);
+        moveTurn->turnHandler(model, cursor.selectedCell.pos);
+    }
+
     return turns::nothingTurn();
 }
 
