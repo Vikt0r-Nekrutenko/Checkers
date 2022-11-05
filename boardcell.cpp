@@ -73,8 +73,8 @@ GameTurn *Checker::takeNextTurn(GameModel *model, const Cursor &cursor)
         GameTurn *rMoveTurn = moveIsPossible(model, cursor, rMoveFw);
         GameTurn *lMoveTurn = moveIsPossible(model, cursor, lMoveFw);
 
-        rMoveTurn->turnHandler(model, rMoveFw);
-        lMoveTurn->turnHandler(model, lMoveFw);
+        rMoveTurn->turnHandler(model, cursor.selectedCell.pos);
+        lMoveTurn->turnHandler(model, cursor.selectedCell.pos);
     }
     return turns::nothingTurn();
 }

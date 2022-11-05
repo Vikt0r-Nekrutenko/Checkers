@@ -12,17 +12,9 @@ TurnsCreator<NothingTurn>           turns::nothingTurn = TurnsCreator<NothingTur
 TurnsCreator<MultiplyAttackTurn>    turns::multiAttatckTurn = TurnsCreator<MultiplyAttackTurn>();
 TurnsCreator<MustBeAttackingTurn>   turns::mustBeAttackingTurn = TurnsCreator<MustBeAttackingTurn>();
 
-auto clearTargets = [](GameModel *model, const stf::Vec2d& t1, const stf::Vec2d& t2) {
-    model->board.clear(t1);
-    model->board.clear(t2);
-
-    BoardCell *transformed = model->cursor.selectableCell.cell->transformation(model);
-    model->board.place(model->cursor.selectableCell.pos, transformed);
-};
-
 void AttackTurn::turnHandler(GameModel *model, const stf::Vec2d& targetPos)
 {
-    clearTargets(model, model->cursor.selectedCell.pos, model->cursor.selectedCell.pos + targetPos);
+    TargetsClearingTurn::turnHandler(model, model->cursor.selectedCell.pos + targetPos);
 
     model->cursor.reset();
     model->player = model->opponent();
@@ -30,13 +22,23 @@ void AttackTurn::turnHandler(GameModel *model, const stf::Vec2d& targetPos)
 
 void MultiplyAttackTurn::turnHandler(GameModel *model, const stf::Vec2d& targetPos)
 {
-    clearTargets(model, model->cursor.selectedCell.pos, model->cursor.selectedCell.pos + targetPos);
+    TargetsClearingTurn::turnHandler(model, model->cursor.selectedCell.pos + targetPos);
     model->cursor.select(model->board.getSelectableCell(model->cursor));
 }
 
 void MoveTurn::turnHandler(GameModel *model, const stf::Vec2d& targetPos)
 {
-    clearTargets(model, model->cursor.selectedCell.pos, model->cursor.selectedCell.pos);
+
+    TargetsClearingTurn::turnHandler(model, targetPos);
     model->cursor.reset();
     model->player = model->opponent();
+}
+
+void TargetsClearingTurn::turnHandler(GameModel *model, const stf::Vec2d &targetPos)
+{
+    model->board.clear(model->cursor.selectedCell.pos);
+    model->board.clear(targetPos);
+
+    BoardCell *transformed = model->cursor.selectableCell.cell->transformation(model);
+    model->board.place(model->cursor.selectableCell.pos, transformed);
 }

@@ -10,23 +10,29 @@ class GameTurn
 public:
     void* operator new(size_t size);
 
-    virtual void turnHandler(GameModel *, const stf::Vec2d&) { }
+    virtual void turnHandler(GameModel *, const stf::Vec2d&) { return; }
 };
 
 class MustBeAttackingTurn : public GameTurn {};
 
 class NothingTurn : public GameTurn {};
 
-class AttackTurn : public GameTurn
+class TargetsClearingTurn : public GameTurn
+{
+public:
+    void turnHandler(GameModel *model, const stf::Vec2d &targetPos) override;
+};
+
+class AttackTurn : public TargetsClearingTurn
 {
     void turnHandler(GameModel *model, const stf::Vec2d &targetPos) override;
 };
 
-class MultiplyAttackTurn : public GameTurn
+class MultiplyAttackTurn : public TargetsClearingTurn
 {
     void turnHandler(GameModel *model, const stf::Vec2d &targetPos) override;
 };
-class MoveTurn : public GameTurn
+class MoveTurn : public TargetsClearingTurn
 {
     void turnHandler(GameModel *model, const stf::Vec2d &targetPos) override;
 };
