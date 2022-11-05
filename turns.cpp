@@ -23,9 +23,8 @@ auto clearTargets = [](GameModel *model, const stf::Vec2d& t1, const stf::Vec2d&
     model->board.clear(t1);
     model->board.clear(t2);
 
-    model->board.place(model->cursor.selectableCell.pos, model->cursor.selectableCell.cell);
-    model->board.wCheckerIsInBlackZoneTransform(model->cursor.selectableCell.pos);
-    model->board.bCheckerIsInWhiteZoneTransform(model->cursor.selectableCell.pos);
+    BoardCell *transformed = model->cursor.selectableCell.cell->transformation(model);
+    model->board.place(model->cursor.selectableCell.pos, transformed);
 };
 
 void AttackTurn::turnHandler(GameModel *model)

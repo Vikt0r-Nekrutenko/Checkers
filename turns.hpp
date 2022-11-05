@@ -3,6 +3,7 @@
 
 #include <corecrt.h>
 class GameModel;
+class BoardCell;
 class GameTurn
 {
 public:

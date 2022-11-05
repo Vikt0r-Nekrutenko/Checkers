@@ -8,6 +8,13 @@ auto isOpponent = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& d
     return model->board[cursor.selectedCell.pos + direction]->color() == model->opponent()->color();
 };
 
+BoardCell *BoardCell::transformation(GameModel *model)
+{
+    return isTransformPossible(model)
+            ? getTransformPiece()
+            : this;
+}
+
 GameTurn* BoardCell::isAttackTurnAvailiable(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const
 {
     try {
@@ -139,4 +146,24 @@ GameTurn *Queen::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, con
          return turns::multiAttatckTurn();
 
     return turns::attackTurn();
+}
+
+bool WChecker::isTransformPossible(GameModel *model)
+{
+    return model->board.isInBlackZone(model->cursor.selectableCell.pos);
+}
+
+BoardCell *WChecker::getTransformPiece()
+{
+    return GameBoard::whiteQueen();
+}
+
+bool BChecker::isTransformPossible(GameModel *model)
+{
+    return model->board.isInWhiteZone(model->cursor.selectableCell.pos);
+}
+
+BoardCell *BChecker::getTransformPiece()
+{
+    return GameBoard::blackQueen();
 }

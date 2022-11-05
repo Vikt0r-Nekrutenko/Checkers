@@ -23,6 +23,8 @@ public:
 
     void wCheckerIsInBlackZoneTransform(const stf::Vec2d& pos);
     void bCheckerIsInWhiteZoneTransform(const stf::Vec2d& pos);
+    bool isInBlackZone(const stf::Vec2d& pos) const;
+    bool isInWhiteZone(const stf::Vec2d& pos) const;
 
     BoardCell* getSelectedCell(const Cursor& cursor);
     BoardCell* getSelectableCell(const Cursor& cursor);

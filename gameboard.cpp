@@ -66,6 +66,18 @@ void GameBoard::bCheckerIsInWhiteZoneTransform(const stf::Vec2d &pos) {
     }
 }
 
+bool GameBoard::isInBlackZone(const stf::Vec2d &pos) const
+{
+    int indx = Size.x * pos.y + pos.x;
+    return  (indx >= Size.x * Size.y - Size.x && indx < Size.x * Size.y);
+}
+
+bool GameBoard::isInWhiteZone(const stf::Vec2d &pos) const
+{
+    int indx = Size.x * pos.y + pos.x;
+    return (indx >= 0 && indx < Size.x);
+}
+
 BoardCell *GameBoard::getSelectedCell(const Cursor &cursor)
 {
     return (*this)[cursor.selectedCell.pos];

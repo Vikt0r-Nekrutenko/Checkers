@@ -19,10 +19,13 @@ public:
         return _cellAllocator.allocate(size);
     }
     virtual uint8_t view() const { return 0; }
+    virtual bool isTransformPossible(GameModel *) { return false; };
+    virtual BoardCell* getTransformPiece() { return this; };
     virtual stf::ColorTable color() const { return stf::ColorTable::Default; }
     virtual GameTurn* takeNextTurn(GameModel *, const Cursor&) { return turns::nothingTurn(); }
     virtual GameTurn* isNextTurnAreAttack(GameModel *, const Cursor&, const stf::Vec2d&, const stf::Vec2d&) { return turns::nothingTurn(); }
 
+    BoardCell* transformation(GameModel *model);
     GameTurn* isAttackTurnAvailiable(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const;
     GameTurn* isMultiAttackTurn(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const;
     GameTurn* isAttackTurnPossible(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const;
@@ -85,6 +88,8 @@ public:
         rMoveFw   = {+1,+1}, lMoveFw   = {-1,+1};
         rAttackFw = {+2,+2}, lAttackFw = {-2,+2};
     }
+    bool isTransformPossible(GameModel *model) override;
+    BoardCell* getTransformPiece() override;
 };
 
 class BChecker : public Checker, public BlackPlayer
@@ -95,6 +100,8 @@ public:
         rMoveFw   = {+1,-1}, lMoveFw   = {-1,-1};
         rAttackFw = {+2,-2}, lAttackFw = {-2,-2};
     }
+    virtual bool isTransformPossible(GameModel *model) override;
+    BoardCell* getTransformPiece() override;
 };
 
 class WQueen : public Queen, public WhitePlayer {};
