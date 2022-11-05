@@ -18,15 +18,12 @@ struct Direction
 class BoardCell
 {
 public:
-    void* operator new(size_t size)
-    {
-        return _cellAllocator.allocate(size);
-    }
-    virtual uint8_t view() const { return 0; }
-    virtual stf::ColorTable color() const { return stf::ColorTable::Default; }
+    void* operator new(size_t size);
+    virtual uint8_t view() const;
+    virtual stf::ColorTable color() const;
 
-    virtual bool isTransformPossible(GameModel *) { return false; };
-    virtual BoardCell* getTransformPiece() { return this; };
+    virtual bool isTransformPossible(GameModel *);;
+    virtual BoardCell* getTransformPiece();;
     BoardCell* transformation(GameModel *model);
 
     void takeNextTurn(GameModel *, const Cursor&);
@@ -41,14 +38,14 @@ public:
 
     GameTurn* moveIsPossible(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection) const;
 
-    std::vector<Direction> directions;
     static stf::sdb::DynamicFieldsAllocator _cellAllocator;
+    std::vector<Direction> directions;
 };
 
 class EmptyCell : public BoardCell
 {
 public:
-    uint8_t view() const override
+    inline uint8_t view() const override
     {
         return 'e';
     }

@@ -6,17 +6,13 @@
 class Checker : virtual public BoardCell
 {
 public:
-    uint8_t view() const override { return 'o'; }
+    inline uint8_t view() const override { return 'o'; }
 };
 
 class WChecker : public Checker, public WhitePlayer
 {
 public:
-    WChecker()
-    {
-        directions.push_back({{+1,+1},{+2,+2}}); // right move dir & right attack dir
-        directions.push_back({{-1,+1},{-2,+2}}); // left move dir && right attack dir
-    }
+    WChecker();
     bool isTransformPossible(GameModel *model) override;
     BoardCell* getTransformPiece() override;
 };
@@ -24,11 +20,7 @@ public:
 class BChecker : public Checker, public BlackPlayer
 {
 public:
-    BChecker()
-    {
-        directions.push_back({{+1,-1},{+2,-2}}); // right move dir & right attack dir
-        directions.push_back({{-1,-1},{-2,-2}}); // left move dir && right attack dir
-    }
+    BChecker();
     virtual bool isTransformPossible(GameModel *model) override;
     BoardCell* getTransformPiece() override;
 };

@@ -12,8 +12,6 @@ SOURCES += \
         gamemodel.cpp \
         gameview.cpp \
         main.cpp \
-        players.cpp \
-        queen.cpp \
         turns.cpp
 
 LIBS += -L$$PWD/../stf/release/ -lstf

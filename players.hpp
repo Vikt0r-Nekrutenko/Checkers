@@ -6,13 +6,13 @@
 class WhitePlayer : virtual public BoardCell
 {
 public:
-    stf::ColorTable color() const override { return stf::ColorTable::White; }
+    inline stf::ColorTable color() const override { return stf::ColorTable::White; }
 };
 
 class BlackPlayer : virtual public BoardCell
 {
 public:
-    stf::ColorTable color() const override { return stf::ColorTable::Red; }
+    inline stf::ColorTable color() const override { return stf::ColorTable::Red; }
 };
 
 

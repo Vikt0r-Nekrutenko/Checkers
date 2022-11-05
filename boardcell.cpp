@@ -8,6 +8,31 @@ auto isOpponent = [](GameModel *model, const Cursor& cursor, const stf::Vec2d& d
     return model->board[cursor.selectedCell.pos + direction]->color() == model->opponent()->color();
 };
 
+void *BoardCell::operator new(size_t size)
+{
+    return _cellAllocator.allocate(size);
+}
+
+uint8_t BoardCell::view() const
+{
+    return 0;
+}
+
+stf::ColorTable BoardCell::color() const
+{
+    return stf::ColorTable::Default;
+}
+
+bool BoardCell::isTransformPossible(GameModel *)
+{
+    return false;
+}
+
+BoardCell *BoardCell::getTransformPiece()
+{
+    return this;
+}
+
 BoardCell *BoardCell::transformation(GameModel *model)
 {
     return isTransformPossible(model)
