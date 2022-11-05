@@ -3,15 +3,17 @@
 
 GameTurn *Checker::takeNextTurn(GameModel *model, const Cursor &cursor)
 {
-    bool isAttack = true;
+    GameTurn *isAttack = turns::attackTurn();
 
     for(auto i : directions) {
         GameTurn *attackTurn = isNextTurnAreAttack(model, cursor, i.move, i.attack);
         attackTurn->turnHandler(model, i.move);
-        isAttack &= (attackTurn == turns::nothingTurn());
+        isAttack = (attackTurn == turns::nothingTurn())
+                ? turns::nothingTurn()
+                : attackTurn;
     }
 
-    if(isAttack == false)
+    if(isAttack != turns::attackTurn())
         return turns::nothingTurn();
 
     for(auto i : directions) {
