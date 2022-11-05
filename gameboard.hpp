@@ -4,9 +4,10 @@
 #include "vec2d.hpp"
 #include <stdexcept>
 #include <vector>
-#include "boardcell.hpp"
+#include "checker.hpp"
+#include "queen.hpp"
+#include "cellcreator.hpp"
 
-class BoardCell;
 struct Cursor;
 
 class GameBoard

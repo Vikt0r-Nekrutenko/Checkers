@@ -5,11 +5,15 @@ CONFIG -= qt
 
 SOURCES += \
         boardcell.cpp \
+        cellcreator.cpp \
+        checker.cpp \
         cursor.cpp \
         gameboard.cpp \
         gamemodel.cpp \
         gameview.cpp \
         main.cpp \
+        players.cpp \
+        queen.cpp \
         turns.cpp
 
 LIBS += -L$$PWD/../stf/release/ -lstf
@@ -23,8 +27,12 @@ DEPENDPATH += $$PWD/../stf \
 
 HEADERS += \
     boardcell.hpp \
+    cellcreator.hpp \
+    checker.hpp \
     cursor.hpp \
     gameboard.hpp \
     gamemodel.hpp \
     gameview.hpp \
+    players.hpp \
+    queen.hpp \
     turns.hpp
