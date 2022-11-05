@@ -3,42 +3,20 @@
 
 GameModel::GameModel() : stf::smv::BaseModel()
 {
-//    board.place(1, GameBoard::whiteChecker());
-//    board.place(3, GameBoard::whiteChecker());
-//    board.place(5, GameBoard::whiteChecker());
-//    board.place(7, GameBoard::whiteChecker());
+    int n = 0;
+    BoardCell *cell = GameBoard::whiteChecker();
 
-//    board.place(8, GameBoard::whiteChecker());
-//    board.place(10, GameBoard::whiteChecker());
-//    board.place(12, GameBoard::whiteChecker());
-//    board.place(14, GameBoard::whiteChecker());
-
-//    board.place(17, GameBoard::whiteChecker());
-//    board.place(19, GameBoard::whiteChecker());
-//    board.place(21, GameBoard::whiteChecker());
-//    board.place(23, GameBoard::whiteChecker());
-
-//    board.place(39+1, GameBoard::blackChecker());
-//    board.place(39+3, GameBoard::blackChecker());
-//    board.place(39+5, GameBoard::blackChecker());
-//    board.place(39+7, GameBoard::blackChecker());
-
-//    board.place(39+10, GameBoard::blackChecker());
-//    board.place(39+12, GameBoard::blackChecker());
-//    board.place(39+14, GameBoard::blackChecker());
-//    board.place(39+16, GameBoard::blackChecker());
-
-//    board.place(39+17, GameBoard::blackChecker());
-//    board.place(39+19, GameBoard::blackChecker());
-//    board.place(39+21, GameBoard::blackChecker());
-//    board.place(39+23, GameBoard::blackChecker());
-
-    board.place({2,1}, GameBoard::blackChecker());
-    board.place({2,2}, GameBoard::blackChecker());
-
-    board.place({3,1}, GameBoard::whiteChecker());
-    board.place({1,3}, GameBoard::whiteChecker());
-    board.place({3,3}, GameBoard::whiteChecker());
+    for(int y = 0; y < 8; ++y) {
+        for(int x = 1; x < 8; x += 2) {
+            if(y == 3) {
+                y = 5;
+                cell = GameBoard::blackChecker();
+            }
+            int indx = 8 * y + (x - n);
+            board.place(indx, cell);
+        }
+        n ^= 1;
+    }
 }
 
 BoardCell *GameModel::opponent() const {
@@ -74,20 +52,41 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
     return sender;
 }
 
-stf::smv::IView *GameModel::select(stf::smv::IView *sender)
-{
-    return sender;
-}
-
 stf::smv::IView *GameModel::keyEventsHandler(stf::smv::IView *sender, const int key)
 {
     switch (key)
     {
-    case 'w': if(cursor.selectableCell.pos.y > 0) cursor.selectableCell.pos -= stf::Vec2d(0,1); break;
-    case 'a': if(cursor.selectableCell.pos.x > 0) cursor.selectableCell.pos -= stf::Vec2d(1,0); break;
-    case 's': if(cursor.selectableCell.pos.y < board.Size.y-1) cursor.selectableCell.pos += stf::Vec2d(0,1); break;
-    case 'd': if(cursor.selectableCell.pos.x < board.Size.x-1) cursor.selectableCell.pos += stf::Vec2d(1,0); break;
-    case 'q': return nullptr;
+    case 'w':
+        if(cursor.selectableCell.pos.y > 0)
+            cursor.selectableCell.pos.y -= 1;
+        else
+            cursor.selectableCell.pos.y = board.Size.y - 1;
+        break;
+
+    case 'a':
+        if(cursor.selectableCell.pos.x > 0)
+            cursor.selectableCell.pos.x -= 1;
+        else
+            cursor.selectableCell.pos.x = board.Size.x - 1;
+        break;
+
+    case 's':
+        if(cursor.selectableCell.pos.y < board.Size.y-1)
+            cursor.selectableCell.pos.y += 1;
+        else
+            cursor.selectableCell.pos.y = 0;
+        break;
+
+    case 'd':
+        if(cursor.selectableCell.pos.x < board.Size.x-1)
+            cursor.selectableCell.pos.x += 1;
+        else
+            cursor.selectableCell.pos.x = 0;
+        break;
+
+    case 'q':
+        return nullptr;
+
     case ' ':
         return put(sender);
     }

@@ -33,8 +33,4 @@ void GameView::show(stf::Renderer &renderer)
     model->player->color() == stf::ColorTable::Red
             ? renderer.drawText({0,10}, "Black player turn")
             : renderer.drawText({0,10}, "White player turn");
-
-    renderer.draw({0,12}, "Exception counter : %d", model->exCount);
-    if(model->isSelect) renderer.draw({0, 14}, "SELECT");
-                   else renderer.draw({0, 14}, "PUT!!!");
 }
