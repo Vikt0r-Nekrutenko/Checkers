@@ -66,15 +66,15 @@ GameTurn *Checker::takeNextTurn(GameModel *model, const Cursor &cursor)
     GameTurn *rAttackTurn = isNextTurnAreAttack(model, cursor, rMoveFw, rAttackFw);
     GameTurn *lAttackTurn = isNextTurnAreAttack(model, cursor, lMoveFw, lAttackFw);
 
-    rAttackTurn->turnHandler(model);
-    lAttackTurn->turnHandler(model);
+    rAttackTurn->turnHandler(model, rMoveFw);
+    lAttackTurn->turnHandler(model, lMoveFw);
 
     if(rAttackTurn == turns::nothingTurn() && lAttackTurn == turns::nothingTurn()) {
         GameTurn *rMoveTurn = moveIsPossible(model, cursor, rMoveFw);
         GameTurn *lMoveTurn = moveIsPossible(model, cursor, lMoveFw);
 
-        rMoveTurn->turnHandler(model);
-        lMoveTurn->turnHandler(model);
+        rMoveTurn->turnHandler(model, rMoveFw);
+        lMoveTurn->turnHandler(model, lMoveFw);
     }
     return turns::nothingTurn();
 }
@@ -109,18 +109,18 @@ GameTurn *Queen::takeNextTurn(GameModel *model, const Cursor &cursor)
     GameTurn *rbwMoveTurn = moveIsPossible(model, cursor, rMoveBw);
     GameTurn *lbwMoveTurn = moveIsPossible(model, cursor, lMoveBw);
 
-    rfwAttackTurn->turnHandler(model);
-    lfwAttackTurn->turnHandler(model);
-    rbwAttackTurn->turnHandler(model);
-    lbwAttackTurn->turnHandler(model);
+    rfwAttackTurn->turnHandler(model, rMoveFw);
+    lfwAttackTurn->turnHandler(model, lMoveFw);
+    rbwAttackTurn->turnHandler(model, rMoveBw);
+    lbwAttackTurn->turnHandler(model, lMoveBw);
 
     if(rfwAttackTurn == turns::nothingTurn() && lfwAttackTurn == turns::nothingTurn() &&
        rbwAttackTurn == turns::nothingTurn() && lbwAttackTurn == turns::nothingTurn())
     {
-        rfwMoveTurn->turnHandler(model);
-        lfwMoveTurn->turnHandler(model);
-        rbwMoveTurn->turnHandler(model);
-        lbwMoveTurn->turnHandler(model);
+        rfwMoveTurn->turnHandler(model, rMoveFw);
+        lfwMoveTurn->turnHandler(model, lMoveFw);
+        rbwMoveTurn->turnHandler(model, rMoveBw);
+        lbwMoveTurn->turnHandler(model, lMoveBw);
     }
 
     return turns::nothingTurn();

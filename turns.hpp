@@ -1,6 +1,7 @@
 #ifndef TURNS_HPP
 #define TURNS_HPP
 
+#include "vec2d.hpp"
 #include <corecrt.h>
 class GameModel;
 class BoardCell;
@@ -9,7 +10,7 @@ class GameTurn
 public:
     void* operator new(size_t size);
 
-    virtual void turnHandler(GameModel *) { }
+    virtual void turnHandler(GameModel *, const stf::Vec2d&) { }
 };
 
 class MustBeAttackingTurn : public GameTurn {};
@@ -18,16 +19,16 @@ class NothingTurn : public GameTurn {};
 
 class AttackTurn : public GameTurn
 {
-    void turnHandler(GameModel *model) override;
+    void turnHandler(GameModel *model, const stf::Vec2d &targetPos) override;
 };
 
 class MultiplyAttackTurn : public GameTurn
 {
-    void turnHandler(GameModel *model) override;
+    void turnHandler(GameModel *model, const stf::Vec2d &targetPos) override;
 };
 class MoveTurn : public GameTurn
 {
-    void turnHandler(GameModel *model) override;
+    void turnHandler(GameModel *model, const stf::Vec2d &targetPos) override;
 };
 
 template<typename T> class TurnsCreator {

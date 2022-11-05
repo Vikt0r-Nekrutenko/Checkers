@@ -12,13 +12,6 @@ TurnsCreator<NothingTurn>           turns::nothingTurn = TurnsCreator<NothingTur
 TurnsCreator<MultiplyAttackTurn>    turns::multiAttatckTurn = TurnsCreator<MultiplyAttackTurn>();
 TurnsCreator<MustBeAttackingTurn>   turns::mustBeAttackingTurn = TurnsCreator<MustBeAttackingTurn>();
 
-auto getTargetPos = [](const Selector& s1, const Selector& s2) -> stf::Vec2d {
-    stf::Vec2d sub = s1.pos - s2.pos;
-    stf::Vec2d pos = { sub.x / std::abs(sub.x),
-                       sub.y / std::abs(sub.y) };
-    return pos;
-};
-
 auto clearTargets = [](GameModel *model, const stf::Vec2d& t1, const stf::Vec2d& t2) {
     model->board.clear(t1);
     model->board.clear(t2);
@@ -27,21 +20,21 @@ auto clearTargets = [](GameModel *model, const stf::Vec2d& t1, const stf::Vec2d&
     model->board.place(model->cursor.selectableCell.pos, transformed);
 };
 
-void AttackTurn::turnHandler(GameModel *model)
+void AttackTurn::turnHandler(GameModel *model, const stf::Vec2d& targetPos)
 {
-    clearTargets(model, model->cursor.selectedCell.pos, model->cursor.selectedCell.pos + getTargetPos(model->cursor.selectableCell, model->cursor.selectedCell));
+    clearTargets(model, model->cursor.selectedCell.pos, model->cursor.selectedCell.pos + targetPos);
 
     model->cursor.reset();
     model->player = model->opponent();
 }
 
-void MultiplyAttackTurn::turnHandler(GameModel *model)
+void MultiplyAttackTurn::turnHandler(GameModel *model, const stf::Vec2d& targetPos)
 {
-    clearTargets(model, model->cursor.selectedCell.pos, model->cursor.selectedCell.pos + getTargetPos(model->cursor.selectableCell, model->cursor.selectedCell));
+    clearTargets(model, model->cursor.selectedCell.pos, model->cursor.selectedCell.pos + targetPos);
     model->cursor.select(model->board.getSelectableCell(model->cursor));
 }
 
-void MoveTurn::turnHandler(GameModel *model)
+void MoveTurn::turnHandler(GameModel *model, const stf::Vec2d& targetPos)
 {
     clearTargets(model, model->cursor.selectedCell.pos, model->cursor.selectedCell.pos);
     model->cursor.reset();
