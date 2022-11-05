@@ -8,11 +8,11 @@
 class GameModel : public stf::smv::BaseModel
 {
 public:
-    GameModel();
 
     BoardCell *opponent() const;
     stf::smv::IView* put(stf::smv::IView *sender);
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) final;
+    void reset();
 
     GameBoard board = GameBoard();
     Cursor cursor = Cursor();

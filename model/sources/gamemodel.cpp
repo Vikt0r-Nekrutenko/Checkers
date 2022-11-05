@@ -1,24 +1,6 @@
 #include "gamemodel.hpp"
 #include <algorithm>
 
-GameModel::GameModel() : stf::smv::BaseModel()
-{
-    int n = 0;
-    BoardCell *cell = GameBoard::whiteChecker();
-
-    for(int y = 0; y < 8; ++y) {
-        for(int x = 1; x < 8; x += 2) {
-            if(y == 3) {
-                y = 5;
-                cell = GameBoard::blackChecker();
-            }
-            int indx = 8 * y + (x - n);
-            board.place(indx, cell);
-        }
-        n ^= 1;
-    }
-}
-
 BoardCell *GameModel::opponent() const {
     if (player == GameBoard::blackPlayer())
         return GameBoard::whitePlayer();
@@ -94,4 +76,12 @@ stf::smv::IView *GameModel::keyEventsHandler(stf::smv::IView *sender, const int 
         return put(sender);
     }
     return sender;
+}
+
+void GameModel::reset()
+{
+    cursor.reset();
+    board = GameBoard();
+    player = GameBoard::blackPlayer();
+    lastTurn = turns::nothingTurn();
 }

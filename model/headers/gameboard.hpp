@@ -31,7 +31,7 @@ public:
     BoardCell* getSelectedCell(const Cursor& cursor);
     BoardCell* getSelectableCell(const Cursor& cursor);
 
-    const stf::Vec2d Size { 8, 8 };
+    stf::Vec2d Size { 8, 8 };
     std::vector<BoardCell*> board;
 
     static CellCreator<EmptyCell>   emptyCell;
