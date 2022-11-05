@@ -1,5 +1,7 @@
 #include "gameboard.hpp"
 #include "cursor.hpp"
+#include "boardcell.hpp"
+#include "gamemodel.hpp"
 
 CellCreator<EmptyCell>   GameBoard::emptyCell   = CellCreator<EmptyCell>();
 CellCreator<WhitePlayer> GameBoard::whitePlayer = CellCreator<WhitePlayer>();
@@ -76,6 +78,25 @@ bool GameBoard::isInWhiteZone(const stf::Vec2d &pos) const
 {
     int indx = Size.x * pos.y + pos.x;
     return (indx >= 0 && indx < Size.x);
+}
+
+std::vector<stf::Vec2d> GameBoard::findPossibleAttacks(GameModel *model) const
+{
+    std::vector<stf::Vec2d> possibleAttacks;
+    for(int y = 0; y < Size.y; ++y) {
+        for(int x = 0; x < Size.x; ++x) {
+            try {
+                if((*this)[{x,y}]->color() != model->player->color())
+                    continue;
+                if((*this)[{x,y}]->isAttackTurnAvailiable(model, {x,y}) == turns::nothingTurn())
+                    continue;
+                possibleAttacks.push_back({x,y});
+            } catch(...) {
+                continue;
+            }
+        }
+    }
+    return possibleAttacks;
 }
 
 BoardCell *GameBoard::getSelectedCell(const Cursor &cursor)

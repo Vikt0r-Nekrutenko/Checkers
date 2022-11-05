@@ -63,21 +63,7 @@ auto areSelectedCellValid = [](const std::vector<stf::Vec2d>& possibleAttacks, c
 stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 {
     BoardCell *cell = board.getSelectableCell(cursor);
-
-    std::vector<stf::Vec2d> possibleAttacks;
-    for(int y = 0; y < board.Size.y; ++y) {
-        for(int x = 0; x < board.Size.x; ++x) {
-            try {
-                if(board[{x,y}]->color() != player->color())
-                    continue;
-                if(board[{x,y}]->isAttackTurnAvailiable(this, {x,y}) == turns::nothingTurn())
-                    continue;
-                possibleAttacks.push_back({x,y});
-            } catch(...) {
-                continue;
-            }
-        }
-    }
+    auto possibleAttacks = board.findPossibleAttacks(this);
 
     if(cell->color() == player->color()) {
         cursor.select(cell);
