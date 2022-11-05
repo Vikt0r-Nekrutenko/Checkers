@@ -23,10 +23,12 @@ public:
     virtual BoardCell* getTransformPiece() { return this; };
     virtual stf::ColorTable color() const { return stf::ColorTable::Default; }
     virtual GameTurn* takeNextTurn(GameModel *, const Cursor&) { return turns::nothingTurn(); }
-    virtual GameTurn* isNextTurnAreAttack(GameModel *, const Cursor&, const stf::Vec2d&, const stf::Vec2d&) { return turns::nothingTurn(); }
+    virtual GameTurn* isNextTurnAreAttack(GameModel *, const Cursor&, const stf::Vec2d&, const stf::Vec2d&) const { return turns::nothingTurn(); }
+    virtual GameTurn* isAttackTurnAvailiable(GameModel *, const stf::Vec2d&) const { return turns::nothingTurn(); }
 
     BoardCell* transformation(GameModel *model);
     GameTurn* isAttackTurnAvailiable(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const;
+    GameTurn* isAttackTurnAvailiable(GameModel *model, const stf::Vec2d& pos, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const;
     GameTurn* isMultiAttackTurn(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const;
     GameTurn* isAttackTurnPossible(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const;
     GameTurn* moveIsPossible(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection) const;
@@ -60,7 +62,8 @@ class Checker : virtual public BoardCell
 public:
     uint8_t view() const override { return 'o'; }
     GameTurn* takeNextTurn(GameModel *model, const Cursor &cursor) override;
-    GameTurn* isNextTurnAreAttack(GameModel *, const Cursor&, const stf::Vec2d&, const stf::Vec2d&) override;
+    GameTurn* isAttackTurnAvailiable(GameModel *model, const stf::Vec2d&pos) const override;
+    GameTurn* isNextTurnAreAttack(GameModel *, const Cursor&, const stf::Vec2d&, const stf::Vec2d&) const override;
 
     stf::Vec2d rMoveFw   = {0,0}, lMoveFw   = {0,0};
     stf::Vec2d rAttackFw = {0,0}, lAttackFw = {0,0};
@@ -71,7 +74,7 @@ class Queen : virtual public BoardCell
 public:
     uint8_t view() const override { return 'Q'; }
     GameTurn* takeNextTurn(GameModel *model, const Cursor &cursor) override;
-    GameTurn* isNextTurnAreAttack(GameModel *, const Cursor&, const stf::Vec2d&, const stf::Vec2d&) override;
+    GameTurn* isNextTurnAreAttack(GameModel *, const Cursor&, const stf::Vec2d&, const stf::Vec2d&) const override;
 
     stf::Vec2d rMoveFw   = {+1,+1}, lMoveFw   = {-1,+1};
     stf::Vec2d rAttackFw = {+2,+2}, lAttackFw = {-2,+2};

@@ -1,4 +1,5 @@
 #include "gamemodel.hpp"
+#include <algorithm>
 
 GameModel::GameModel() : stf::smv::BaseModel()
 {
@@ -32,12 +33,12 @@ GameModel::GameModel() : stf::smv::BaseModel()
 //    board.place(39+21, GameBoard::blackChecker());
 //    board.place(39+23, GameBoard::blackChecker());
 
-    board.place({2,6}, GameBoard::blackQueen());
+    board.place({2,6}, GameBoard::blackChecker());
     board.place({2,4}, GameBoard::blackChecker());
 
     board.place({3,1}, GameBoard::whiteChecker());
     board.place({1,3}, GameBoard::whiteChecker());
-    board.place({3,3}, GameBoard::whiteChecker());
+//    board.place({3,3}, GameBoard::whiteChecker());
 }
 
 BoardCell *GameModel::opponent() const {
@@ -47,13 +48,40 @@ BoardCell *GameModel::opponent() const {
         return GameBoard::blackPlayer();
 }
 
+auto areSelectedCellValid = [](const std::vector<stf::Vec2d>& possibleAttacks, const Cursor& cursor) {
+    if(possibleAttacks.empty())
+        return true;
+
+    for(auto i : possibleAttacks) {
+        if(i == cursor.selectedCell.pos) {
+            return true;
+        }
+    }
+    return false;
+};
+
 stf::smv::IView *GameModel::put(stf::smv::IView *sender)
 {
     BoardCell *cell = board.getSelectableCell(cursor);
 
-    if(cell->color() == player->color())
+    std::vector<stf::Vec2d> possibleAttacks;
+    for(int y = 0; y < board.Size.y; ++y) {
+        for(int x = 0; x < board.Size.x; ++x) {
+            try {
+                if(board[{x,y}]->color() != player->color())
+                    continue;
+                if(board[{x,y}]->isAttackTurnAvailiable(this, {x,y}) == turns::nothingTurn())
+                    continue;
+                possibleAttacks.push_back({x,y});
+            } catch(...) {
+                continue;
+            }
+        }
+    }
+
+    if(cell->color() == player->color()) {
         cursor.select(cell);
-    else {
+    } else if(areSelectedCellValid(possibleAttacks, cursor)) {
         board.getSelectedCell(cursor)->takeNextTurn(this, cursor);
     }
 

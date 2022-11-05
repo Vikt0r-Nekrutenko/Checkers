@@ -26,6 +26,18 @@ GameTurn* BoardCell::isAttackTurnAvailiable(GameModel *model, const Cursor& curs
     return turns::nothingTurn();
 }
 
+GameTurn *BoardCell::isAttackTurnAvailiable(GameModel *model, const stf::Vec2d &pos, const stf::Vec2d &moveDirection, const stf::Vec2d &attackDirection) const
+{
+    try {
+        BoardCell *cellBehindOpponent = model->board[pos + attackDirection];
+
+        if(model->board[pos + moveDirection]->color() == model->opponent()->color() &&
+                cellBehindOpponent == GameBoard::emptyCell())
+            return turns::attackTurn();
+    } catch(const std::out_of_range& ex) {}
+    return turns::nothingTurn();
+}
+
 GameTurn* BoardCell::isMultiAttackTurn(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const
 {
     try {
@@ -79,9 +91,19 @@ GameTurn *Checker::takeNextTurn(GameModel *model, const Cursor &cursor)
     return turns::nothingTurn();
 }
 
-GameTurn *Checker::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
+GameTurn *Checker::isAttackTurnAvailiable(GameModel *model, const stf::Vec2d &pos) const
 {
-    if(isAttackTurnAvailiable(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
+    GameTurn *rAttackTurn = BoardCell::isAttackTurnAvailiable(model, pos, rMoveFw, rAttackFw);
+    GameTurn *lAttackTurn = BoardCell::isAttackTurnAvailiable(model, pos, lMoveFw, lAttackFw);
+
+    if(rAttackTurn != turns::nothingTurn() || lAttackTurn != turns::nothingTurn())
+        return turns::attackTurn();
+    return turns::nothingTurn();
+}
+
+GameTurn *Checker::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const
+{
+    if(BoardCell::isAttackTurnAvailiable(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
         return turns::nothingTurn();
 
     if(isAttackTurnPossible(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
@@ -126,9 +148,9 @@ GameTurn *Queen::takeNextTurn(GameModel *model, const Cursor &cursor)
     return turns::nothingTurn();
 }
 
-GameTurn *Queen::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection)
+GameTurn *Queen::isNextTurnAreAttack(GameModel *model, const Cursor& cursor, const stf::Vec2d& moveDirection, const stf::Vec2d& attackDirection) const
 {
-    if(isAttackTurnAvailiable(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
+    if(BoardCell::isAttackTurnAvailiable(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
         return turns::nothingTurn();
 
     if(isAttackTurnPossible(model, cursor, moveDirection, attackDirection) == turns::nothingTurn())
