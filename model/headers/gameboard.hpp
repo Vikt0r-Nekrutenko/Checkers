@@ -30,6 +30,7 @@ public:
     bool isInBlackZone(const stf::Vec2d& pos) const;
     bool isInWhiteZone(const stf::Vec2d& pos) const;
     std::vector<stf::Vec2d> findPossibleAttacks(GameModel *model) const;
+    stf::Vec2d calculatePieceCount() const;
 
     BoardCell* getSelectedCell(const Cursor& cursor);
     BoardCell* getSelectableCell(const Cursor& cursor);

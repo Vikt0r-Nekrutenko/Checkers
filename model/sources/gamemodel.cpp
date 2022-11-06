@@ -1,6 +1,13 @@
 #include "gamemodel.hpp"
 #include <algorithm>
 
+GameModel::GameModel()
+{
+    try {
+        results.load(results.header().size - 1);
+    } catch(const std::string& ex) { MessageBoxA(0, ex.c_str(), "", MB_OK); }
+}
+
 GameModel::~GameModel()
 {
     try {
@@ -40,6 +47,20 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         lastTurn = board.getSelectedCell(cursor)->takeNextTurn(this, cursor);
     } else {
         cursor.reset();
+    }
+
+    stf::Vec2d pieceCount = board.calculatePieceCount();
+    bPieceCount = pieceCount.x;
+    wPieceCount = pieceCount.y;
+
+    if(!bPieceCount || !wPieceCount) {
+        if(player == GameBoard::blackPlayer())
+            results.gameOverHandler(player->uniqueNumericView(), {0,1});
+        else
+            results.gameOverHandler(player->uniqueNumericView(), {1,0});
+
+        results.save();
+        return nullptr;
     }
 
     return sender;
@@ -104,8 +125,7 @@ void GameModel::reset()
 }
 
 GameSaveModel::GameSaveModel(GameModel *model)
-    : stf::sdb::StackModel("checkers_saves.sdb"), mModel(model)
-{}
+    : stf::sdb::StackModel("checkers_saves.sdb"), mModel(model) {}
 
 void GameSaveModel::save()
 {
@@ -128,4 +148,14 @@ void GameSaveModel::load()
     mModel->player = GameBoard().restoreFromIntView(player());
 
     push<GameSaveModel>();
+}
+
+GameResultModel::GameResultModel()
+    : stf::sdb::Model("checkers_results.sdb") {}
+
+void GameResultModel::gameOverHandler(int winner, const stf::Vec2d &wins){
+    gameTime = stf::Time(nullptr);
+    wWins = wWins() + wins.x;
+    bWins = bWins() + wins.y;
+    this->winner = winner;
 }

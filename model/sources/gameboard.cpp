@@ -114,6 +114,18 @@ std::vector<stf::Vec2d> GameBoard::findPossibleAttacks(GameModel *model) const
     return possibleAttacks;
 }
 
+stf::Vec2d GameBoard::calculatePieceCount() const
+{
+    stf::Vec2d pieceCount { 0, 0 };
+
+    for(auto i : board)
+        if(i->color() == blackPlayer()->color())
+            pieceCount.x++;
+        else if(i->color() == whitePlayer()->color())
+            pieceCount.y++;
+    return pieceCount;
+}
+
 BoardCell *GameBoard::getSelectedCell(const Cursor &cursor)
 {
     return (*this)[cursor.selectedCell.pos];

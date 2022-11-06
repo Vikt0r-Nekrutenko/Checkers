@@ -21,10 +21,24 @@ public:
     GameModel *mModel;
 };
 
+class GameResultModel : public stf::sdb::Model
+{
+public:
+    GameResultModel();
+
+    void gameOverHandler(int winner, const stf::Vec2d& wins);;
+
+    stf::sdb::DateTimeField gameTime = stf::sdb::DateTimeField(this);
+    stf::sdb::IntField winner = stf::sdb::IntField(this);
+    stf::sdb::IntField wWins = stf::sdb::IntField(this);
+    stf::sdb::IntField bWins = stf::sdb::IntField(this);
+};
+
 class GameModel : public stf::smv::BaseModel
 {
 
 public:
+    GameModel();
     ~GameModel() override;
     BoardCell *opponent() const;
     stf::smv::IView* put(stf::smv::IView *sender);
@@ -33,11 +47,15 @@ public:
     bool exitWithoutSave = true;
 
     GameSaveModel saves = GameSaveModel(this);
+    GameResultModel results = GameResultModel();
 
     GameBoard board = GameBoard();
     Cursor cursor = Cursor();
     BoardCell *player = GameBoard::blackPlayer();
     GameTurn *lastTurn = turns::nothingTurn();
+
+    uint8_t bPieceCount = 0;
+    uint8_t wPieceCount = 0;
 };
 
 #endif // GAMEMODEL_HPP
