@@ -17,7 +17,7 @@ void StoryView::show(Renderer& renderer)
       for(auto it = qres->begin(); it != qres->end(); ++it) {
           GameResultModel* info = qres->get<GameResultModel>(*it);
 
-          BoardCell *winner = GameBoard::restoreFromIntView(info->winner());
+          BoardCell *winner = UniqueNumericCell::restoreFromIntView(info->winner());
           renderer.draw(zerop + stf::Vec2d(0, k++ * 2), "%s Player has won: \'%s\'",
                         info->gameTime().asString().c_str(),
                         winner == GameBoard::blackPlayer() ? "Black" : "White");

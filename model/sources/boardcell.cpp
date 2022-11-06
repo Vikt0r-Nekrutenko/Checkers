@@ -1,4 +1,5 @@
 #include "boardcell.hpp"
+#include "players.hpp"
 #include "gamemodel.hpp"
 #include <string>
 
@@ -16,6 +17,29 @@ void *BoardCell::operator new(size_t size)
 int UniqueNumericCell::uniqueNumericView() const
 {
     return 0;
+}
+
+BoardCell *UniqueNumericCell::restoreFromIntView(const int view)
+{
+    switch (view) {
+    case -3: return GameBoard::blackQueen();
+    case -2: return GameBoard::blackPlayer();
+    case -1: return GameBoard::blackChecker();
+    case 0:  return GameBoard::emptyCell();
+    case +1: return GameBoard::whiteChecker();
+    case +2: return GameBoard::whitePlayer();
+    case +3: return GameBoard::whiteQueen();
+    }
+    return GameBoard::emptyCell();
+}
+
+Player *UniqueNumericCell::restorePlayerIntView(const int view)
+{
+    switch (view) {
+    case -2: return GameBoard::blackPlayer();
+    case +2: return GameBoard::whitePlayer();
+    }
+    return new Player();
 }
 
 uint8_t BoardCell::view() const

@@ -7,6 +7,7 @@
 #include "turns.hpp"
 
 class GameModel;
+class Player;
 struct Cursor;
 
 struct Direction
@@ -19,6 +20,8 @@ class UniqueNumericCell
 {
 public:
     virtual int uniqueNumericView() const;
+    static BoardCell *restoreFromIntView(const int view);
+    static Player *restorePlayerIntView(const int view);
 };
 
 class ColoredCell

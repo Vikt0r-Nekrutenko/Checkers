@@ -138,12 +138,9 @@ void GameSaveModel::load()
 
     for(size_t i = 0; i < mModel->board.board.size(); ++i) {
         int uniqueIndx = board[i];
-        mModel->board.place(i, GameBoard::restoreFromIntView(uniqueIndx));
+        mModel->board.place(i, UniqueNumericCell::restoreFromIntView(uniqueIndx));
     }
-    if(player() == -2)
-        mModel->player =  GameBoard::blackPlayer();
-    else
-        mModel->player = GameBoard::whitePlayer();
+    mModel->player = UniqueNumericCell::restorePlayerIntView(player());
 }
 
 GameResultModel::GameResultModel()

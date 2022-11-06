@@ -34,7 +34,6 @@ public:
 
     BoardCell* getSelectedCell(const Cursor& cursor);
     BoardCell* getSelectableCell(const Cursor& cursor);
-    static BoardCell *restoreFromIntView(const int view);
 
     stf::Vec2d Size { BOARD_W, BOARD_H };
     std::vector<BoardCell*> board;
