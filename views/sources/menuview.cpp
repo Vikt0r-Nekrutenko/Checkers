@@ -47,7 +47,8 @@ IView* MenuView::keyEventsHandler(const int key)
 }
 
 MenuView::MenuView(GameModel *model, const char *sprite)
-    : IView(model), m_smenu(Sprite(sprite))
+    : IView(model), m_logo(Sprite("sprs/logo.spr")), m_smenu(Sprite(sprite))
+
 {
     m_menuItemsCount = m_smenu.markers().size() / 2;
 }

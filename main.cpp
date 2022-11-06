@@ -4,13 +4,14 @@
 #include "gamemodel.hpp"
 #include "gameview.hpp"
 #include "menuview.hpp"
+#include "pausemenuview.hpp"
 
 class Game : public stf::Window
 {
     int n = 0;
     GameModel gameModel = GameModel();
     GameView gameView = GameView(&gameModel);
-    MenuView menuView = MenuView(&gameModel);
+    PauseMenuView menuView = PauseMenuView(&gameModel);
     stf::smv::IView *currentView = &menuView;
 
     bool onUpdate(const float) final
