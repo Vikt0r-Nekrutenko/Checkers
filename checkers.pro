@@ -30,7 +30,8 @@ HEADERS += \
     model/headers/turns.hpp \
     views/headers/closeview.hpp \
     views/headers/menuview.hpp \
-    views/headers/pausemenuview.hpp
+    views/headers/pausemenuview.hpp \
+    views/headers/storyview.hpp
 
 SOURCES += \
         main.cpp \
@@ -44,7 +45,8 @@ SOURCES += \
         model/sources/turns.cpp \
         views/sources/closeview.cpp \
         views/sources/menuview.cpp \
-    views/sources/pausemenuview.cpp
+    views/sources/pausemenuview.cpp \
+    views/sources/storyview.cpp
 
 DISTFILES += \
     sprs/end.spr \

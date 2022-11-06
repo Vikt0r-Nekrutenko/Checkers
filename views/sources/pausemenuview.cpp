@@ -1,6 +1,6 @@
 #include "pausemenuview.hpp"
 //#include "gameview.hpp"
-//#include "storyview.hpp"
+#include "storyview.hpp"
 #include "closeview.hpp"
 #include "gamemodel.hpp"
 
@@ -34,7 +34,7 @@ IView* PauseMenuView::menuSelectConfirm()
         static_cast<GameModel*>(m_model)->saves.load();
       } catch(...) { }
       return this;
-//    case 4: return new StoryView(static_cast<GameModel*>(m_model), this);
+    case 4: return new StoryView(static_cast<GameModel*>(m_model), this);
     case 5: return new CloseView(static_cast<GameModel*>(m_model));
   }
   return this;
