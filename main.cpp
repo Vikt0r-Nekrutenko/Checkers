@@ -3,13 +3,15 @@
 
 #include "gamemodel.hpp"
 #include "gameview.hpp"
+#include "menuview.hpp"
 
 class Game : public stf::Window
 {
     int n = 0;
     GameModel gameModel = GameModel();
     GameView gameView = GameView(&gameModel);
-    stf::smv::IView *currentView = &gameView;
+    MenuView menuView = MenuView(&gameModel);
+    stf::smv::IView *currentView = &menuView;
 
     bool onUpdate(const float) final
     {

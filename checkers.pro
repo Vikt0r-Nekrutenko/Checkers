@@ -9,11 +9,13 @@ INCLUDEPATH += $$PWD/../stf \
                 $$PWD/../stf/smv \
                 $$PWD/../stf/sdb \
                 $$PWD/model/headers \
+                $$PWD/views/headers \
 
 DEPENDPATH += $$PWD/../stf \
                 $$PWD/../stf/smv \
                 $$PWD/../stf/sdb \
                 $$PWD/model/headers \
+                $$PWD/views/headers \
 
 HEADERS += \
     model/headers/boardcell.hpp \
@@ -26,6 +28,7 @@ HEADERS += \
     model/headers/players.hpp \
     model/headers/queen.hpp \
     model/headers/turns.hpp \
+    views/headers/menuview.hpp
 
 SOURCES += \
         main.cpp \
@@ -37,3 +40,11 @@ SOURCES += \
         model/sources/gamemodel.cpp \
         model/sources/gameview.cpp \
         model/sources/turns.cpp \
+    views/sources/menuview.cpp
+
+DISTFILES += \
+    sprs/end.spr \
+    sprs/menu.spr \
+    sprs/pause_menu.spr \
+    sprs/sboard.spr \
+    sprs/stats.spr
