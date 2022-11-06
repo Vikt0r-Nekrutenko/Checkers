@@ -28,6 +28,7 @@ HEADERS += \
     model/headers/players.hpp \
     model/headers/queen.hpp \
     model/headers/turns.hpp \
+    views/headers/closeview.hpp \
     views/headers/menuview.hpp
 
 SOURCES += \
@@ -40,7 +41,8 @@ SOURCES += \
         model/sources/gamemodel.cpp \
         model/sources/gameview.cpp \
         model/sources/turns.cpp \
-    views/sources/menuview.cpp
+        views/sources/closeview.cpp \
+        views/sources/menuview.cpp \
 
 DISTFILES += \
     sprs/end.spr \

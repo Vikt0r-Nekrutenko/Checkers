@@ -33,11 +33,9 @@ class Game : public stf::Window
                 renderer.drawText({0,12}, "Nothing much");
             }
 
-        if(currentView == nullptr)
-            return false;
         currentView->show(renderer);
 //        return n++ == 1 ? false : true;
-        return true;
+        return currentView->isContinue();
     }
 
     void keyEvents(const int key) final
