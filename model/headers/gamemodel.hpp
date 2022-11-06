@@ -30,6 +30,7 @@ public:
     stf::smv::IView* put(stf::smv::IView *sender);
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) final;
     void reset();
+    bool exitWithoutSave = true;
 
     GameSaveModel saves = GameSaveModel(this);
 

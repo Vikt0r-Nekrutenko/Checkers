@@ -4,7 +4,7 @@
 GameModel::~GameModel()
 {
     try {
-        while(true)
+        while(exitWithoutSave)
             saves.pop<GameSaveModel>();
     } catch(const std::string& ex) { }
 }
