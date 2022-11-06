@@ -42,8 +42,8 @@ public:
     Player *opponent() const;
     stf::smv::IView* put(stf::smv::IView *sender);
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) final;
+    stf::smv::IView* mouseEventsHandler(stf::smv::IView* sender, const stf::MouseRecord& mr) override;
     void reset();
-    bool exitWithoutSave = true;
 
     GameSaveModel saves = GameSaveModel(this);
     GameResultModel results = GameResultModel();

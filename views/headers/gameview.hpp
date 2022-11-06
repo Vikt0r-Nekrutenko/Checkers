@@ -15,6 +15,7 @@ public:
     GameView(BaseModel *model, bool resetTheModel = false);
     ~GameView() override = default;
 
+    IView* mouseEventsHandler(const stf::MouseRecord& mr) override;
     void drawPlayersScore(Renderer &renderer, GameModel *gameModel) const;
     void show(Renderer &renderer) override;
 

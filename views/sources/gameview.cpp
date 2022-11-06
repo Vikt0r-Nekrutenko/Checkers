@@ -19,6 +19,17 @@ GameView::GameView(BaseModel *model, bool resetTheModel)
     }
 }
 
+IView *GameView::mouseEventsHandler(const MouseRecord &mr)
+{
+    Vec2d mp(mr.x, mr.y);
+    Vec2d dif = (m_board.Size()-1) / 8;
+    Vec2d pos = (mp - pzero) / dif - Vec2d(1,1);
+
+    if(pos.x >= 0 && pos.y >= 0 && pos.x < static_cast<GameModel*>(m_model)->board.Size.x && pos.y < static_cast<GameModel*>(m_model)->board.Size.y)
+        static_cast<GameModel*>(m_model)->cursor.selectableCell.pos = pos;
+    return m_model->mouseEventsHandler(this, mr);
+}
+
 void GameView::drawPlayersScore(Renderer &renderer, GameModel *gameModel) const
 {
     renderer.draw(pzero - Vec2d(-2, +2), "Player 'Black': %d", gameModel->bPieceCount);
