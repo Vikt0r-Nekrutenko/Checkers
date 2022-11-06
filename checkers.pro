@@ -52,6 +52,7 @@ SOURCES += \
         views/sources/storyview.cpp
 
 DISTFILES += \
+    README.md \
     sprs/end.spr \
     sprs/menu.spr \
     sprs/pause_menu.spr \
