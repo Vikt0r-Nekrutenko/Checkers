@@ -39,7 +39,7 @@ class GameModel : public stf::smv::BaseModel
 
 public:
     ~GameModel() override;
-    BoardCell *opponent() const;
+    Player *opponent() const;
     stf::smv::IView* put(stf::smv::IView *sender);
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) final;
     void reset();
@@ -50,7 +50,7 @@ public:
 
     GameBoard board = GameBoard();
     Cursor cursor = Cursor();
-    BoardCell *player = GameBoard::blackPlayer();
+    Player *player = GameBoard::blackPlayer();
     GameTurn *lastTurn = turns::nothingTurn();
 
     uint8_t bPieceCount = 0;

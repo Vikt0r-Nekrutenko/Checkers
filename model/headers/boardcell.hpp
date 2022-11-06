@@ -15,13 +15,23 @@ struct Direction
     stf::Vec2d attack {0,0};
 };
 
-class BoardCell
+class UniqueNumericCell
+{
+public:
+    virtual int uniqueNumericView() const;
+};
+
+class ColoredCell
+{
+public:
+    virtual stf::ColorTable color() const;
+};
+
+class BoardCell : public ColoredCell, public UniqueNumericCell
 {
 public:
     void* operator new(size_t size);
-    virtual int uniqueNumericView() const;
     virtual uint8_t view() const;
-    virtual stf::ColorTable color() const;
 
     virtual bool isTransformPossible(GameModel *);;
     virtual BoardCell* getTransformPiece();;

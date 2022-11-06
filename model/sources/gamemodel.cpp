@@ -11,7 +11,7 @@ GameModel::~GameModel()
     } catch(const std::string& ex) { }
 }
 
-BoardCell *GameModel::opponent() const {
+Player *GameModel::opponent() const {
     if (player == GameBoard::blackPlayer())
         return GameBoard::whitePlayer();
     else
@@ -133,7 +133,7 @@ void GameSaveModel::load()
         int uniqueIndx = board[i];
         mModel->board.place(i, GameBoard::restoreFromIntView(uniqueIndx));
     }
-    mModel->player = GameBoard().restoreFromIntView(player());
+    mModel->player = (Player*)GameBoard().restoreFromIntView(player());
 
     push<GameSaveModel>();
 }

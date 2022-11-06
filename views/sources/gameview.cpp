@@ -32,7 +32,7 @@ void GameView::show(Renderer &renderer)
 
     GameModel *gameModel = static_cast<GameModel*>(m_model);
 
-    renderer.drawText(pzero + m_board.markers().at(0), gameModel->player == GameBoard::blackPlayer() ? "Black" : "White");
+    renderer.drawText(pzero + m_board.markers().at(0), gameModel->player->name().c_str());
 
     drawPlayersScore(renderer, gameModel);
 
