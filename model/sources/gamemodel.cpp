@@ -53,11 +53,13 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
     bPieceCount = pieceCount.x;
     wPieceCount = pieceCount.y;
 
-    if(!bPieceCount || !wPieceCount) {
-        if(player == GameBoard::blackPlayer())
-            results.gameOverHandler(player->uniqueNumericView(), {0,1});
-        else
-            results.gameOverHandler(player->uniqueNumericView(), {1,0});
+    if(!bPieceCount) {
+        results.gameOverHandler(GameBoard::whitePlayer()->uniqueNumericView(), {1,0});
+
+        results.save();
+        return nullptr;
+    } else if(!wPieceCount) {
+        results.gameOverHandler(GameBoard::blackPlayer()->uniqueNumericView(), {0,1});
 
         results.save();
         return nullptr;
