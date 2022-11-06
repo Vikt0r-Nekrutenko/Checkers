@@ -3,12 +3,11 @@
 #include "pausemenuview.hpp"
 #include <algorithm>
 
-GameModel::~GameModel()
+GameModel::GameModel()
 {
     try {
-        while(exitWithoutSave)
-            saves.pop<GameSaveModel>();
-    } catch(const std::string& ex) { }
+        results.load(results.header().size - 1);
+    } catch(...) { }
 }
 
 Player *GameModel::opponent() const {
@@ -133,9 +132,10 @@ void GameSaveModel::load()
         int uniqueIndx = board[i];
         mModel->board.place(i, GameBoard::restoreFromIntView(uniqueIndx));
     }
-    mModel->player = (Player*)GameBoard().restoreFromIntView(player());
-
-    push<GameSaveModel>();
+    if(player() == -2)
+        mModel->player =  GameBoard::blackPlayer();
+    else
+        mModel->player = GameBoard::whitePlayer();
 }
 
 GameResultModel::GameResultModel()

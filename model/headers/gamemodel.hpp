@@ -38,7 +38,7 @@ class GameModel : public stf::smv::BaseModel
 {
 
 public:
-    ~GameModel() override;
+    GameModel();
     Player *opponent() const;
     stf::smv::IView* put(stf::smv::IView *sender);
     stf::smv::IView *keyEventsHandler(stf::smv::IView *sender, const int key) final;
