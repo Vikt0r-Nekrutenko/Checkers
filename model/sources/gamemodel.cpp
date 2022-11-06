@@ -3,13 +3,6 @@
 #include "pausemenuview.hpp"
 #include <algorithm>
 
-GameModel::GameModel()
-{
-    try {
-        results.load(results.header().size - 1);
-    } catch(const std::string& ex) { MessageBoxA(0, ex.c_str(), "", MB_OK); }
-}
-
 GameModel::~GameModel()
 {
     try {

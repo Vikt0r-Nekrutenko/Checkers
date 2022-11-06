@@ -51,13 +51,3 @@ void GameView::show(Renderer &renderer)
     renderer.drawPixel(cell(m_board, gameModel, gameModel->cursor.selectableCell.pos) - stf::Vec2d(1,0), '[');
     renderer.drawPixel(cell(m_board, gameModel, gameModel->cursor.selectableCell.pos) - stf::Vec2d(-1,0), ']');
 }
-
-IView *GameView::mouseEventsHandler(const MouseRecord &mr)
-{
-    Vec2d mp(mr.x, mr.y);
-    Vec2d dif = (m_board.Size()-1) / 8;
-    Vec2d pos = (mp - pzero) / dif - Vec2d(1,1);
-
-    static_cast<GameModel*>(m_model)->cursor.selectableCell.pos = pos;
-    return m_model->mouseEventsHandler(this, mr);
-}

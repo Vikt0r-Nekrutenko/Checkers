@@ -18,8 +18,6 @@ public:
     void drawPlayersScore(Renderer &renderer, GameModel *gameModel) const;
     void show(Renderer &renderer) override;
 
-    IView* mouseEventsHandler(const stf::MouseRecord& mr) override;
-
 private:
     Sprite m_board = Sprite("sprs/sboard.spr");
 };

@@ -6,7 +6,6 @@
 
 class Game : public stf::Window
 {
-    int n = 0;
     GameModel gameModel = GameModel();
     MenuView menuView = MenuView(&gameModel);
     stf::smv::IView *currentView = &menuView;
@@ -14,7 +13,6 @@ class Game : public stf::Window
     bool onUpdate(const float) final
     {
         currentView->show(renderer);
-//        return n++ == 1 ? false : true;
         return currentView->isContinue();
     }
 
@@ -23,14 +21,13 @@ class Game : public stf::Window
         currentView = currentView->keyEventsHandler(key);
     }
 
-    void mouseEvents(const stf::MouseRecord&) final
+    void mouseEvents(const stf::MouseRecord& mr) final
     {
-
+        currentView = currentView->mouseEventsHandler(mr);
     }
 };
 
 int main()
 {
-    Game().run();
-//    BoardCell::_cellAllocator.info();
+    return Game().run();
 }
