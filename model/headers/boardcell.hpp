@@ -48,7 +48,7 @@ class EmptyCell : public BoardCell
 public:
     inline uint8_t view() const override
     {
-        return 'e';
+        return ' ';
     }
     inline int uniqueNumericView() const override
     {

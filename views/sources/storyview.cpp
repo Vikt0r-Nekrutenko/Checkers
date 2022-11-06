@@ -20,9 +20,7 @@ void StoryView::show(Renderer& renderer)
           BoardCell *winner = GameBoard::restoreFromIntView(info->winner());
           renderer.draw(zerop + stf::Vec2d(0, k++ * 2), "%s Player has won: \'%s\'",
                         info->gameTime().asString().c_str(),
-                        winner == GameBoard::blackPlayer() ? "Black" : "White",
-                        info->bWins(),
-                        info->wWins());
+                        winner == GameBoard::blackPlayer() ? "Black" : "White");
     }
 
     renderer.drawNumber(statsp + m_stats.markers().at(0), (int)qres->size());

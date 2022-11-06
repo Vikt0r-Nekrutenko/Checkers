@@ -1,4 +1,6 @@
 #include "gamemodel.hpp"
+#include "endview.hpp"
+#include "pausemenuview.hpp"
 #include <algorithm>
 
 GameModel::GameModel()
@@ -57,12 +59,12 @@ stf::smv::IView *GameModel::put(stf::smv::IView *sender)
         results.gameOverHandler(GameBoard::whitePlayer()->uniqueNumericView(), {1,0});
 
         results.save();
-        return nullptr;
+        return new EndView(this);
     } else if(!wPieceCount) {
         results.gameOverHandler(GameBoard::blackPlayer()->uniqueNumericView(), {0,1});
 
         results.save();
-        return nullptr;
+        return new EndView(this);
     }
 
     return sender;
@@ -100,17 +102,8 @@ stf::smv::IView *GameModel::keyEventsHandler(stf::smv::IView *sender, const int 
             cursor.selectableCell.pos.x = 0;
         break;
 
-    case 'z':
-        cursor.reset();
-        saves.load();
-        break;
-
-    case 'x':
-        saves.save();
-        break;
-
     case 'q':
-        return nullptr;
+        return new PauseMenuView(this);
 
     case ' ':
         return put(sender);

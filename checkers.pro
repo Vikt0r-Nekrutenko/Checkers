@@ -24,11 +24,13 @@ HEADERS += \
     model/headers/cursor.hpp \
     model/headers/gameboard.hpp \
     model/headers/gamemodel.hpp \
-    model/headers/gameview.hpp \
     model/headers/players.hpp \
     model/headers/queen.hpp \
     model/headers/turns.hpp \
+    views/headers/endview.hpp \
+    views/headers/gameview.hpp \
     views/headers/closeview.hpp \
+    views/headers/gameview.hpp \
     views/headers/menuview.hpp \
     views/headers/pausemenuview.hpp \
     views/headers/storyview.hpp
@@ -41,12 +43,13 @@ SOURCES += \
         model/sources/cursor.cpp \
         model/sources/gameboard.cpp \
         model/sources/gamemodel.cpp \
-        model/sources/gameview.cpp \
         model/sources/turns.cpp \
         views/sources/closeview.cpp \
+        views/sources/endview.cpp \
+        views/sources/gameview.cpp \
         views/sources/menuview.cpp \
-    views/sources/pausemenuview.cpp \
-    views/sources/storyview.cpp
+        views/sources/pausemenuview.cpp \
+        views/sources/storyview.cpp
 
 DISTFILES += \
     sprs/end.spr \

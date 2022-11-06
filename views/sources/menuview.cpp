@@ -1,5 +1,5 @@
 #include "menuview.hpp"
-//#include "gameview.hpp"
+#include "gameview.hpp"
 #include "gamemodel.hpp"
 #include "storyview.hpp"
 #include "closeview.hpp"
@@ -57,11 +57,11 @@ IView* MenuView::menuSelectConfirm()
 {
   switch(m_cursor)
   {
-//    case 0: return new GameView(static_cast<GameModel*>(m_model));
+    case 0: return new GameView(static_cast<GameModel*>(m_model));
     case 1:
       try {
         static_cast<GameModel*>(m_model)->saves.load();
-//        return new PauseMenuView(static_cast<GameModel*>(m_model));
+        return new PauseMenuView(static_cast<GameModel*>(m_model));
       } catch(...) { return this; }
     case 2: return new StoryView(static_cast<GameModel*>(m_model), this);
     case 3: return new CloseView(static_cast<GameModel*>(m_model));
