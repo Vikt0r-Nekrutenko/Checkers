@@ -19,22 +19,20 @@ GameBoard::GameBoard()
         *it = emptyCell();
     }
 
-//    int n = 0;
-//    BoardCell *cell = GameBoard::whiteChecker();
+    int n = 0;
+    BoardCell *cell = GameBoard::whiteChecker();
 
-//    for(int y = 0; y < 8; ++y) {
-//        for(int x = 1; x < 8; x += 2) {
-//            if(y == 3) {
-//                y = 5;
-//                cell = GameBoard::blackChecker();
-//            }
-//            int indx = 8 * y + (x - n);
-//            place(indx, cell);
-//        }
-//        n ^= 1;
-//    }
-    board.at(1) = whiteChecker();
-    board.at(10) = blackChecker();
+    for(int y = 0; y < 8; ++y) {
+        for(int x = 1; x < 8; x += 2) {
+            if(y == 3) {
+                y = 5;
+                cell = GameBoard::blackChecker();
+            }
+            int indx = 8 * y + (x - n);
+            place(indx, cell);
+        }
+        n ^= 1;
+    }
 }
 
 BoardCell *GameBoard::operator[](const stf::Vec2d &p) {
